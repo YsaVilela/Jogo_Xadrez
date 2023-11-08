@@ -19,20 +19,22 @@ for (let i = 0; i < posicaotabuleiro.length; i++) {
     const posicao = posicaotabuleiro[i];
 
     posicao.addEventListener('click', function () {
-        if (!pecaSelecionada) {
-            for (let j = 0; j < posicaotabuleiro.length; j++) {
-                posicaotabuleiro[j].classList.remove('destacar');
-            }
-                posicao.classList.add('destacar');
-
-            const peca = posicao.querySelector('svg');
-            pecaSelecionada = true;
-            reconhecerPecaClicada(peca, posicao);
-
-            if (peca == null){
-                pecaSelecionada = false;
-            }
+        for (let j = 0; j < posicaotabuleiro.length; j++) {
+            posicaotabuleiro[j].classList.remove('destacar');
         }
+        posicao.classList.add('destacar');
+
+        const peca = posicao.querySelector('svg');
+        if (!pecaSelecionada) {
+            reconhecerPecaClicada(peca, posicao);
+            pecaSelecionada = true;
+        }
+
+
+        if (peca == null) {
+            pecaSelecionada = false;
+        }
+
     });
 }
 
@@ -55,11 +57,12 @@ function reconhecerPecaClicada(peca, posicao) {
 
     for (let i = 0; i < pecas.length; i++) {
         if (peca != null && peca.classList.contains(pecas[i])) {
-            console.log('aqui estou');
             funcoesDeMovimento[pecas[i]](posicao, coluna, linha);
         }
     }
 }
+
+
 
 function movimentosTorre(posicaoOrigem, coluna, linha) {
     let idColuna;
@@ -73,29 +76,81 @@ function movimentosTorre(posicaoOrigem, coluna, linha) {
         const posicao = posicaotabuleiro[i];
         let idPosicao = posicao.id;
 
-        //coluna para a direita
-        for (let c = idColuna; c < colunas.length; c++) {
-            console.log(idPosicao.includes(colunas[c] + linha) + " aumenta");
-            if (idPosicao.includes(colunas[c] + linha)) {
-                posicao.classList.add('movimento');
+        if (idPosicao.includes(coluna) ^ idPosicao.includes(linha)) {
+
+            //para a direita
+            for (let c = idColuna; c < colunas.length; c++) {
+                if (idPosicao.includes(colunas[c] + linha)) {
+                    if (posicao.querySelector('svg') != null) {
+                        break;
+                    } else {
+                        posicao.classList.add('movimento');
+                    }
+                }
+            }
+
+            //para a esquerda
+            for (let c = idColuna; c >= 0; c--) {
+                if (idPosicao.includes(colunas[c] + linha) && posicao.querySelector('svg') == null) {
+                    posicao.classList.add('movimento');
+                }
+                if (posicao.querySelector('svg') != null) {
+                    break;
+                }
             }
         }
-
-        //coluna para a esquerda
-        for (let c = idColuna; c > colunas.length; c--) {
-            console.log(idPosicao + " diminui");
-            if (idPosicao.includes(colunas[c] + linha)) {
-                posicao.classList.add('movimento');
-            }
-        }
-
     }
     validarMovimento(posicaoOrigem);
 }
 
-function movimentosCavalo(posicaoOrigem, coluna, linha) {
 
+function movimentosCavalo(posicaoOrigem, colunaOrigem, linhaOrigem) {
+    const movimentos = [];
+
+    const movimentosRelativos = [
+        [-2, -1],
+        [-2, +1],
+        [-1, -2],
+        [-1, +2],
+        [+1, -2],
+        [+1, +2],
+        [+2, -1],
+        [+2, +1]
+    ];
+
+    for (const [deltaColuna, deltaLinha] of movimentosRelativos) {
+        const novaColunaIndex = colunas.indexOf(colunaOrigem) + deltaColuna;
+        const novaLinhaIndex = linhas.indexOf(linhaOrigem) + deltaLinha;
+
+        if (novaColunaIndex >= 0 && novaColunaIndex < colunas.length &&
+            novaLinhaIndex >= 0 && novaLinhaIndex < linhas.length) {
+            const novaColuna = colunas[novaColunaIndex];
+            const novaLinha = linhas[novaLinhaIndex];
+            const novaPosicao = `${novaColuna}${novaLinha}`;
+            movimentos.push(novaPosicao);
+
+            // Adicione a classe 'movimento' à posição no tabuleiro
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
+        }
+    }
+
+    // Adicione a classe 'movimento' à posição de origem
+    const elementoOrigem = document.getElementById(posicaoOrigem);
+    if (elementoOrigem) {
+        elementoOrigem.classList.add('movimento');
+    }
+
+    validarMovimento(posicaoOrigem);
 }
+
+
+
+
+
+
 
 function movimentosBispo(posicaoOrigem, coluna, linha) {
 }
@@ -105,7 +160,10 @@ function movimentosRainha(posicaoOrigem, coluna, linha) {
 }
 
 function movimentosRei(posicaoOrigem, coluna, linha) {
-
+    for (let i = 0; i < posicaotabuleiro.length; i++) {
+        const posicao = posicaotabuleiro[i];
+        let idPosicao = posicao.id;
+    }
 }
 
 function movimentosPeaoTimeA(posicaoOrigem, coluna, linha) {
@@ -159,7 +217,6 @@ function validarMovimento(posicaoOrigem) {
                 pecaSelecionada = false;
                 var destino = posicaotabuleiro[i];
                 var destinoOcupado = destino.querySelector('svg');
-                console.log(destinoOcupado != null);
 
                 //movimentar para o mesmo lugar || posição ocupada || movimento inválido
                 if (destino == posicaoOrigem || destinoOcupado != null || !destino.classList.contains('movimento')) {
