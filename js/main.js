@@ -1,6 +1,7 @@
 const pecas = ['torre', 'cavalo', 'bispo', 'rainha', 'rei', 'peaoTimeA', 'peaoTimeB'];
 const colunas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 const linhas = ['1', '2', '3', '4', '5', '6', '7', '8'];
+const times = ['timeA', 'timeB'];
 
 const funcoesDeMovimento = {
     'torre': movimentosTorre,
@@ -29,7 +30,6 @@ for (let i = 0; i < posicaotabuleiro.length; i++) {
             reconhecerPecaClicada(peca, posicao);
             pecaSelecionada = true;
         }
-
 
         if (peca == null) {
             pecaSelecionada = false;
@@ -103,7 +103,7 @@ function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
         }
     }
 
-    //movimentos para cima
+    //movimentos para baixo
     for (let i = linhas.indexOf(linhaOrigem) - 1; i >= 0; i--) {
         const novaLinha = linhas[i];
         const novaPosicao = `${colunaOrigem}${novaLinha}`;
@@ -121,7 +121,7 @@ function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
         }
     }
 
-    //movimentos para baixo
+    //movimentos para cima
     for (let i = linhas.indexOf(linhaOrigem) + 1; i < linhas.length; i++) {
         const novaLinha = linhas[i];
         const novaPosicao = `${colunaOrigem}${novaLinha}`;
@@ -288,10 +288,46 @@ function movimentosBispo(posicaoOrigem, colunaOrigem, linhaOrigem) {
 }
 
 function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
-    const movimentosTorre = movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem);
-    const movimentosBispo = movimentosBispo(posicaoOrigem, colunaOrigem, linhaOrigem);
-    const movimentos = movimentosTorre.concat(movimentosBispo);
+    const movimentos = [];
 
+    const deslocamentos = [-1, 0, 1];
+
+    for (const dx of deslocamentos) {
+        for (const dy of deslocamentos) {
+            if (dx !== 0 || dy !== 0) {
+                for (let i = 1; i < 8; i++) {
+                    const novaColunaIndex = colunas.indexOf(colunaOrigem) + dx * i;
+                    const novaLinhaIndex = linhas.indexOf(linhaOrigem) + dy * i;
+
+                    if (
+                        novaColunaIndex >= 0 &&
+                        novaColunaIndex < colunas.length &&
+                        novaLinhaIndex >= 0 &&
+                        novaLinhaIndex < linhas.length
+                    ) {
+                        const novaColuna = colunas[novaColunaIndex];
+                        const novaLinha = linhas[novaLinhaIndex];
+                        const novaPosicao = `${novaColuna}${novaLinha}`;
+                        const elemento = document.getElementById(novaPosicao);
+
+                        if (!elemento || !elemento.querySelector('svg')) {
+                            movimentos.push(novaPosicao);
+
+                            const elemento = document.getElementById(novaPosicao);
+                            if (elemento) {
+                                elemento.classList.add('movimento');
+                            }
+                        } else {
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    validarMovimento(posicaoOrigem);
 }
 
 
@@ -332,39 +368,76 @@ function movimentosRei(posicaoOrigem, colunaOrigem, linhaOrigem) {
     validarMovimento(posicaoOrigem)
 }
 
-function movimentosPeaoTimeA(posicaoOrigem, coluna, linha) {
+function movimentosPeaoTimeA(posicaoOrigem, colunaOrigem, linhaOrigem) {
+    const movimentos = [];
 
-    for (let i = 0; i < posicaotabuleiro.length; i++) {
-        const posicao = posicaotabuleiro[i];
-        let idPosicao = posicao.id;
-        if (posicao.querySelector('svg') == null) {
-            if (linha == 2) {
-                if (idPosicao.includes(coluna + 3) || idPosicao.includes(coluna + 4)) {
-                    posicao.classList.add('movimento');
+    if (linhaOrigem == 2) {
+        for (let i = linhas.indexOf(linhaOrigem) + 1; i <= 3; i++) {
+            const novaLinha = linhas[i];
+            const novaPosicao = `${colunaOrigem}${novaLinha}`;
+            const elemento = document.getElementById(novaPosicao);
+
+            if (!elemento || !elemento.querySelector('svg')) {
+                movimentos.push(novaPosicao);
+
+                const elemento = document.getElementById(novaPosicao);
+                if (elemento) {
+                    elemento.classList.add('movimento');
                 }
             } else {
-                if (idPosicao.includes(coluna + (parseInt(linha) + 1))) {
-                    posicao.classList.add('movimento');
-                }
+                break;
+            }
+        }
+    } else {
+        let i = linhas.indexOf(linhaOrigem);
+        const novaLinha = parseInt(linhas[i]) + 1;
+        const novaPosicao = `${colunaOrigem}${novaLinha}`;
+        const elemento = document.getElementById(novaPosicao);
+
+        if (!elemento || !elemento.querySelector('svg')) {
+            movimentos.push(novaPosicao);
+
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
             }
         }
     }
     validarMovimento(posicaoOrigem);
 }
 
-function movimentosPeaoTimeB(posicaoOrigem, coluna, linha) {
-    for (let i = 0; i < posicaotabuleiro.length; i++) {
-        let posicao = posicaotabuleiro[i];
-        let idPosicao = posicao.id;
-        if (posicao.querySelector('svg') == null) {
-            if (linha == 7) {
-                if (idPosicao.includes(coluna + 6) || idPosicao.includes(coluna + 5)) {
-                    posicao.classList.add('movimento');
+function movimentosPeaoTimeB(posicaoOrigem, colunaOrigem, linhaOrigem) {
+    const movimentos = [];
+
+    if (linhaOrigem == 7) {
+        for (let i = linhas.indexOf(linhaOrigem) - 1 ; i >= 4; i--) {
+            const novaLinha = linhas[i];
+            const novaPosicao = `${colunaOrigem}${novaLinha}`;
+            const elemento = document.getElementById(novaPosicao);
+
+            if (!elemento || !elemento.querySelector('svg')) {
+                movimentos.push(novaPosicao);
+
+                const elemento = document.getElementById(novaPosicao);
+                if (elemento) {
+                    elemento.classList.add('movimento');
                 }
             } else {
-                if (idPosicao.includes(coluna + (parseInt(linha) - 1))) {
-                    posicao.classList.add('movimento');
-                }
+                break;
+            }
+        }
+    } else {
+        let i = linhas.indexOf(linhaOrigem);
+        const novaLinha = parseInt(linhas[i]) - 1;
+        const novaPosicao = `${colunaOrigem}${novaLinha}`;
+        const elemento = document.getElementById(novaPosicao);
+
+        if (!elemento || !elemento.querySelector('svg')) {
+            movimentos.push(novaPosicao);
+
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
             }
         }
     }
