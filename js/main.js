@@ -15,7 +15,6 @@ const funcoesDeMovimento = {
 
 const posicaotabuleiro = document.querySelectorAll('.posicao');
 let pecaSelecionada = false;
-let movimentoConcluido = false;
 
 let jogadorAtual = 'timeA'; // Comece com o jogador 'time A'
 
@@ -65,85 +64,6 @@ function reconhecerPecaClicada(peca, posicao) {
 }
 
 
-
-function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
-    const movimentos = [];
-
-    //movimentos para o lado esquerdo
-    for (let i = colunas.indexOf(colunaOrigem) - 1; i >= 0; i--) {
-        const novaColuna = colunas[i];
-        const novaPosicao = `${novaColuna}${linhaOrigem}`;
-        const elemento = document.getElementById(novaPosicao);
-
-        if (!elemento || !elemento.querySelector('svg')) {
-            movimentos.push(novaPosicao);
-
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('movimento');
-            }
-        } else {
-            break;
-        }
-    }
-
-    //movimentos para o lado direito
-    for (let i = colunas.indexOf(colunaOrigem) + 1; i < colunas.length; i++) {
-        const novaColuna = colunas[i];
-        const novaPosicao = `${novaColuna}${linhaOrigem}`;
-        const elemento = document.getElementById(novaPosicao);
-
-        if (!elemento || !elemento.querySelector('svg')) {
-            movimentos.push(novaPosicao);
-
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('movimento');
-            }
-        } else {
-            break;
-        }
-    }
-
-    //movimentos para baixo
-    for (let i = linhas.indexOf(linhaOrigem) - 1; i >= 0; i--) {
-        const novaLinha = linhas[i];
-        const novaPosicao = `${colunaOrigem}${novaLinha}`;
-        const elemento = document.getElementById(novaPosicao);
-
-        if (!elemento || !elemento.querySelector('svg')) {
-            movimentos.push(novaPosicao);
-
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('movimento');
-            }
-        } else {
-            break;
-        }
-    }
-
-    //movimentos para cima
-    for (let i = linhas.indexOf(linhaOrigem) + 1; i < linhas.length; i++) {
-        const novaLinha = linhas[i];
-        const novaPosicao = `${colunaOrigem}${novaLinha}`;
-        const elemento = document.getElementById(novaPosicao);
-
-        if (!elemento || !elemento.querySelector('svg')) {
-            movimentos.push(novaPosicao);
-
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('movimento');
-            }
-        } else {
-            break;
-        }
-    }
-    validarMovimento(posicaoOrigem);
-}
-
-
 function movimentosCavalo(posicaoOrigem, colunaOrigem, linhaOrigem) {
     const movimentos = [];
 
@@ -167,15 +87,126 @@ function movimentosCavalo(posicaoOrigem, colunaOrigem, linhaOrigem) {
             const novaColuna = colunas[novaColunaIndex];
             const novaLinha = linhas[novaLinhaIndex];
             const novaPosicao = `${novaColuna}${novaLinha}`;
+            const elemento = document.getElementById(novaPosicao);
+
+            movimentos.push(novaPosicao);
+
+            if (elemento) {
+                const pecaCaminho = elemento.querySelector('svg');
+
+                if (!pecaCaminho || !pecaCaminho.classList.contains(jogadorAtual)) {
+                    elemento.classList.add('movimento');
+                }
+            }
+        }
+    }
+
+    validarMovimento(posicaoOrigem);
+}
+
+
+function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
+    const movimentos = [];
+
+    //movimentos para o lado esquerdo
+    for (let i = colunas.indexOf(colunaOrigem) - 1; i >= 0; i--) {
+        const novaColuna = colunas[i];
+        const novaPosicao = `${novaColuna}${linhaOrigem}`;
+        const elemento = document.getElementById(novaPosicao);
+        const pecaCaminho = elemento.querySelector('svg');
+
+        if (!elemento || !pecaCaminho) {
             movimentos.push(novaPosicao);
 
             const elemento = document.getElementById(novaPosicao);
             if (elemento) {
                 elemento.classList.add('movimento');
             }
+        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+            break;
+        } else {
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
+            break;
         }
     }
 
+    //movimentos para o lado direito
+    for (let i = colunas.indexOf(colunaOrigem) + 1; i < colunas.length; i++) {
+        const novaColuna = colunas[i];
+        const novaPosicao = `${novaColuna}${linhaOrigem}`;
+        const elemento = document.getElementById(novaPosicao);
+        const pecaCaminho = elemento.querySelector('svg');
+
+        if (!elemento || !pecaCaminho) {
+            movimentos.push(novaPosicao);
+
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
+        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+            break;
+        } else {
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
+            break;
+        }
+    }
+
+    //movimentos para baixo
+    for (let i = linhas.indexOf(linhaOrigem) - 1; i >= 0; i--) {
+        const novaLinha = linhas[i];
+        const novaPosicao = `${colunaOrigem}${novaLinha}`;
+        const elemento = document.getElementById(novaPosicao);
+        const pecaCaminho = elemento.querySelector('svg');
+
+        if (!elemento || !pecaCaminho) {
+            movimentos.push(novaPosicao);
+
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
+        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+            break;
+        } else {
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
+            break;
+        }
+    }
+
+    //movimentos para cima
+    for (let i = linhas.indexOf(linhaOrigem) + 1; i < linhas.length; i++) {
+        const novaLinha = linhas[i];
+        const novaPosicao = `${colunaOrigem}${novaLinha}`;
+        const elemento = document.getElementById(novaPosicao);
+        const pecaCaminho = elemento.querySelector('svg');
+
+        if (!elemento || !pecaCaminho) {
+            movimentos.push(novaPosicao);
+
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
+        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+            break;
+        } else {
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
+            break;
+        }
+    }
     validarMovimento(posicaoOrigem);
 }
 
@@ -196,7 +227,6 @@ function movimentosBispo(posicaoOrigem, colunaOrigem, linhaOrigem) {
             if (!elemento || !elemento.querySelector('svg')) {
                 movimentos.push(novaPosicao);
 
-                const elemento = document.getElementById(novaPosicao);
                 if (elemento) {
                     elemento.classList.add('movimento');
                 }
@@ -208,7 +238,8 @@ function movimentosBispo(posicaoOrigem, colunaOrigem, linhaOrigem) {
         }
     }
 
-    // Movimentos na diagonal superior direita
+
+    // Movimentos na diagonal inferior direita
     for (let i = 1; i < 8; i++) {
         const novaColunaIndex = colunas.indexOf(colunaOrigem) + i;
         const novaLinhaIndex = linhas.indexOf(linhaOrigem) - i;
@@ -234,12 +265,12 @@ function movimentosBispo(posicaoOrigem, colunaOrigem, linhaOrigem) {
         }
     }
 
-    // Movimentos na diagonal inferior esquerda
+    // Movimentos na diagonal superior esquerda
     for (let i = 1; i < 8; i++) {
         const novaColunaIndex = colunas.indexOf(colunaOrigem) - i;
         const novaLinhaIndex = linhas.indexOf(linhaOrigem) + i;
 
-        if (novaColunaIndex >= 0 && novaLinhaIndex < linhas.length) {
+        if (novaColunaIndex < colunas.length && novaLinhaIndex < linhas.length) {
             const novaColuna = colunas[novaColunaIndex];
             const novaLinha = linhas[novaLinhaIndex];
             const novaPosicao = `${novaColuna}${novaLinha}`;
@@ -260,7 +291,8 @@ function movimentosBispo(posicaoOrigem, colunaOrigem, linhaOrigem) {
         }
     }
 
-    // Movimentos na diagonal inferior direita
+
+    // Movimentos na diagonal superior direita
     for (let i = 1; i < 8; i++) {
         const novaColunaIndex = colunas.indexOf(colunaOrigem) + i;
         const novaLinhaIndex = linhas.indexOf(linhaOrigem) + i;
@@ -297,33 +329,48 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
         const novaColuna = colunas[i];
         const novaPosicao = `${novaColuna}${linhaOrigem}`;
         const elemento = document.getElementById(novaPosicao);
+        const pecaCaminho = elemento.querySelector('svg');
 
-        if (!elemento || !elemento.querySelector('svg')) {
+        if (!elemento || !pecaCaminho) {
             movimentos.push(novaPosicao);
 
             const elemento = document.getElementById(novaPosicao);
             if (elemento) {
                 elemento.classList.add('movimento');
             }
+        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+            break;
         } else {
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
             break;
         }
     }
+
 
     //movimentos para o lado direito
     for (let i = colunas.indexOf(colunaOrigem) + 1; i < colunas.length; i++) {
         const novaColuna = colunas[i];
         const novaPosicao = `${novaColuna}${linhaOrigem}`;
         const elemento = document.getElementById(novaPosicao);
+        const pecaCaminho = elemento.querySelector('svg');
 
-        if (!elemento || !elemento.querySelector('svg')) {
+        if (!elemento || !pecaCaminho) {
             movimentos.push(novaPosicao);
 
             const elemento = document.getElementById(novaPosicao);
             if (elemento) {
                 elemento.classList.add('movimento');
             }
+        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+            break;
         } else {
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
             break;
         }
     }
@@ -333,15 +380,22 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
         const novaLinha = linhas[i];
         const novaPosicao = `${colunaOrigem}${novaLinha}`;
         const elemento = document.getElementById(novaPosicao);
+        const pecaCaminho = elemento.querySelector('svg');
 
-        if (!elemento || !elemento.querySelector('svg')) {
+        if (!elemento || !pecaCaminho) {
             movimentos.push(novaPosicao);
 
             const elemento = document.getElementById(novaPosicao);
             if (elemento) {
                 elemento.classList.add('movimento');
             }
+        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+            break;
         } else {
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
             break;
         }
     }
@@ -351,15 +405,22 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
         const novaLinha = linhas[i];
         const novaPosicao = `${colunaOrigem}${novaLinha}`;
         const elemento = document.getElementById(novaPosicao);
+        const pecaCaminho = elemento.querySelector('svg');
 
-        if (!elemento || !elemento.querySelector('svg')) {
+        if (!elemento || !pecaCaminho) {
             movimentos.push(novaPosicao);
 
             const elemento = document.getElementById(novaPosicao);
             if (elemento) {
                 elemento.classList.add('movimento');
             }
+        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+            break;
         } else {
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
             break;
         }
     }
@@ -419,9 +480,9 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
     // Movimentos na diagonal inferior esquerda
     for (let i = 1; i < 8; i++) {
         const novaColunaIndex = colunas.indexOf(colunaOrigem) - i;
-        const novaLinhaIndex = linhas.indexOf(linhaOrigem) + i;
+        const novaLinhaIndex = linhas.indexOf(linhaOrigem) - i;
 
-        if (novaColunaIndex >= 0 && novaLinhaIndex < linhas.length) {
+        if (novaColunaIndex < colunas.length && novaLinhaIndex >= 0) {
             const novaColuna = colunas[novaColunaIndex];
             const novaLinha = linhas[novaLinhaIndex];
             const novaPosicao = `${novaColuna}${novaLinha}`;
@@ -584,6 +645,20 @@ function movimentosPeaoTimeB(posicaoOrigem, colunaOrigem, linhaOrigem) {
     validarMovimento(posicaoOrigem);
 }
 
+function capturaPeao() {
+    console.log('captura do peão');
+}
+
+function captura(posicaoOrigem, posicaoDestino) {
+    const pecaCaptura = posicaoDestino.querySelector('svg');
+    posicaoDestino.removeChild(pecaCaptura);
+    const pecaPromovida = posicaoOrigem.querySelector('svg');
+    posicaoDestino.appendChild(pecaPromovida);
+    jogadorAtual = jogadorAtual === 'timeA' ? 'timeB' : 'timeA';
+
+    console.log('captura de outras pecas');
+}
+
 
 function validarMovimento(posicaoOrigem) {
     let movimentoRealizado = false;
@@ -595,14 +670,24 @@ function validarMovimento(posicaoOrigem) {
             if (!movimentoRealizado) {
                 pecaSelecionada = false;
                 var destino = posicaotabuleiro[i];
-                var destinoOcupado = destino.querySelector('svg');
+                var pecaDestino = destino.querySelector('svg');
+                var pecaOrigem = posicaoOrigem.querySelector('svg')
                 movimentoRealizado = true;
 
-                //movimentar para o mesmo lugar || posição ocupada || movimento inválido
-                if (destino == posicaoOrigem || destinoOcupado != null || !destino.classList.contains('movimento')) {
+                //captura
+                if (pecaDestino != null && destino.classList.contains('movimento')) {
+                    limparTabuleiro();
+                    if (!pecaDestino.classList.contains(jogadorAtual) && !pecaOrigem.classList.contains('peao')) {
+                        captura(posicaoOrigem, destino);
+                    } else {
+                        console.log('Movimento inválido');
+                    }
+                }
+
+                //movimentar para o mesmo lugar || movimento inválido
+                else if (destino == posicaoOrigem || !destino.classList.contains('movimento')) {
                     limparTabuleiro();
                     console.log('Movimento inválido');
-                    movimentoConcluido = false;
 
                 } else {
                     moverPeca(posicaoOrigem, destino);
