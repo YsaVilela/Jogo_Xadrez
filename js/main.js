@@ -67,6 +67,7 @@ function reconhecerPecaClicada(peca, posicao) {
 function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
     const movimentos = [];
 
+    //movimentos para o lado esquerdo
     for (let i = colunas.indexOf(colunaOrigem) - 1; i >= 0; i--) {
         const novaColuna = colunas[i];
         const novaPosicao = `${novaColuna}${linhaOrigem}`;
@@ -84,6 +85,7 @@ function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
         }
     }
 
+    //movimentos para o lado direito
     for (let i = colunas.indexOf(colunaOrigem) + 1; i < colunas.length; i++) {
         const novaColuna = colunas[i];
         const novaPosicao = `${novaColuna}${linhaOrigem}`;
@@ -101,24 +103,8 @@ function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
         }
     }
 
+    //movimentos para cima
     for (let i = linhas.indexOf(linhaOrigem) - 1; i >= 0; i--) {
-        const novaLinha = linhas[i];
-        const novaPosicao = `${colunaOrigem}${novaLinha}`;
-        const elemento = document.getElementById(novaPosicao);
-
-        if (!elemento || !elemento.querySelector('svg')) {
-            movimentos.push(novaPosicao);
-
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('movimento');
-            }
-        } else {
-            break; 
-        }
-    }
-
-    for (let i = linhas.indexOf(linhaOrigem) + 1; i < linhas.length; i++) {
         const novaLinha = linhas[i];
         const novaPosicao = `${colunaOrigem}${novaLinha}`;
         const elemento = document.getElementById(novaPosicao);
@@ -135,11 +121,23 @@ function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
         }
     }
 
-    const elementoOrigem = document.getElementById(posicaoOrigem);
-    if (elementoOrigem) {
-        elementoOrigem.classList.add('movimento');
-    }
+    //movimentos para baixo
+    for (let i = linhas.indexOf(linhaOrigem) + 1; i < linhas.length; i++) {
+        const novaLinha = linhas[i];
+        const novaPosicao = `${colunaOrigem}${novaLinha}`;
+        const elemento = document.getElementById(novaPosicao);
 
+        if (!elemento || !elemento.querySelector('svg')) {
+            movimentos.push(novaPosicao);
+
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
+        } else {
+            break;
+        }
+    }
     validarMovimento(posicaoOrigem);
 }
 
@@ -176,21 +174,117 @@ function movimentosCavalo(posicaoOrigem, colunaOrigem, linhaOrigem) {
         }
     }
 
-    const elementoOrigem = document.getElementById(posicaoOrigem);
-    if (elementoOrigem) {
-        elementoOrigem.classList.add('movimento');
-    }
-
     validarMovimento(posicaoOrigem);
 }
 
+function movimentosBispo(posicaoOrigem, colunaOrigem, linhaOrigem) {
+        const movimentos = [];
+    
+        // Movimentos na diagonal superior esquerda
+        for (let i = 1; i < 8; i++) {
+            const novaColunaIndex = colunas.indexOf(colunaOrigem) - i;
+            const novaLinhaIndex = linhas.indexOf(linhaOrigem) - i;
+    
+            if (novaColunaIndex >= 0 && novaLinhaIndex >= 0) {
+                const novaColuna = colunas[novaColunaIndex];
+                const novaLinha = linhas[novaLinhaIndex];
+                const novaPosicao = `${novaColuna}${novaLinha}`;
+                const elemento = document.getElementById(novaPosicao);
+    
+                if (!elemento || !elemento.querySelector('svg')) {
+                    movimentos.push(novaPosicao);
+    
+                    const elemento = document.getElementById(novaPosicao);
+                    if (elemento) {
+                        elemento.classList.add('movimento');
+                    }
+                } else {
+                    break;   
+                }
+            } else {
+                break;   
+            }
+        }
+    
+        // Movimentos na diagonal superior direita
+        for (let i = 1; i < 8; i++) {
+            const novaColunaIndex = colunas.indexOf(colunaOrigem) + i;
+            const novaLinhaIndex = linhas.indexOf(linhaOrigem) - i;
+    
+            if (novaColunaIndex < colunas.length && novaLinhaIndex >= 0) {
+                const novaColuna = colunas[novaColunaIndex];
+                const novaLinha = linhas[novaLinhaIndex];
+                const novaPosicao = `${novaColuna}${novaLinha}`;
+                const elemento = document.getElementById(novaPosicao);
+    
+                if (!elemento || !elemento.querySelector('svg')) {
+                    movimentos.push(novaPosicao);
+    
+                    const elemento = document.getElementById(novaPosicao);
+                    if (elemento) {
+                        elemento.classList.add('movimento');
+                    }
+                } else {
+                    break; 
+                }
+            } else {
+                break; 
+            }
+        }
+    
+        // Movimentos na diagonal inferior esquerda
+        for (let i = 1; i < 8; i++) {
+            const novaColunaIndex = colunas.indexOf(colunaOrigem) - i;
+            const novaLinhaIndex = linhas.indexOf(linhaOrigem) + i;
+    
+            if (novaColunaIndex >= 0 && novaLinhaIndex < linhas.length) {
+                const novaColuna = colunas[novaColunaIndex];
+                const novaLinha = linhas[novaLinhaIndex];
+                const novaPosicao = `${novaColuna}${novaLinha}`;
+                const elemento = document.getElementById(novaPosicao);
+    
+                if (!elemento || !elemento.querySelector('svg')) {
+                    movimentos.push(novaPosicao);
+    
+                    const elemento = document.getElementById(novaPosicao);
+                    if (elemento) {
+                        elemento.classList.add('movimento');
+                    }
+                } else {
+                    break; 
+                }
+            } else {
+                break;   
+            }
+        }
+    
+        // Movimentos na diagonal inferior direita
+        for (let i = 1; i < 8; i++) {
+            const novaColunaIndex = colunas.indexOf(colunaOrigem) + i;
+            const novaLinhaIndex = linhas.indexOf(linhaOrigem) + i;
+    
+            if (novaColunaIndex < colunas.length && novaLinhaIndex < linhas.length) {
+                const novaColuna = colunas[novaColunaIndex];
+                const novaLinha = linhas[novaLinhaIndex];
+                const novaPosicao = `${novaColuna}${novaLinha}`;
+                const elemento = document.getElementById(novaPosicao);
+    
+                if (!elemento || !elemento.querySelector('svg')) {
+                    movimentos.push(novaPosicao);
+    
+                    const elemento = document.getElementById(novaPosicao);
+                    if (elemento) {
+                        elemento.classList.add('movimento');
+                    }
+                } else {
+                    break;   
+                }
+            } else {
+                break;   
+            }
+        }
 
-
-
-
-
-
-function movimentosBispo(posicaoOrigem, coluna, linha) {
+    validarMovimento(posicaoOrigem);
 }
 
 function movimentosRainha(posicaoOrigem, coluna, linha) {
@@ -198,10 +292,7 @@ function movimentosRainha(posicaoOrigem, coluna, linha) {
 }
 
 function movimentosRei(posicaoOrigem, coluna, linha) {
-    for (let i = 0; i < posicaotabuleiro.length; i++) {
-        const posicao = posicaotabuleiro[i];
-        let idPosicao = posicao.id;
-    }
+
 }
 
 function movimentosPeaoTimeA(posicaoOrigem, coluna, linha) {
