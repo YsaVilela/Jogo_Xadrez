@@ -13,25 +13,31 @@ const funcoesDeMovimento = {
 }
 
 const posicaotabuleiro = document.querySelectorAll('.posicao');
+let pecaSelecionada = false;
 
 for (let i = 0; i < posicaotabuleiro.length; i++) {
     const posicao = posicaotabuleiro[i];
 
     posicao.addEventListener('click', function () {
-        for (let j = 0; j < posicaotabuleiro.length; j++) {
-            posicaotabuleiro[j].classList.remove('destacar');
+        if (!pecaSelecionada) {
+            for (let j = 0; j < posicaotabuleiro.length; j++) {
+                posicaotabuleiro[j].classList.remove('destacar');
+            }
+                posicao.classList.add('destacar');
+
+            const peca = posicao.querySelector('svg');
+            pecaSelecionada = true;
+            reconhecerPecaClicada(peca, posicao);
+
+            if (peca == null){
+                pecaSelecionada = false;
+            }
         }
-        posicao.classList.add('destacar');
-
-        const peca = posicao.querySelector('svg');
-        reconhecerPecaClicada(peca, posicao);
     });
-
 }
 
-
 function reconhecerPecaClicada(peca, posicao) {
-    const idPosicao = posicao.id;
+    let idPosicao = posicao.id;
     var coluna = 0;
     var linha = 0;
 
@@ -49,13 +55,42 @@ function reconhecerPecaClicada(peca, posicao) {
 
     for (let i = 0; i < pecas.length; i++) {
         if (peca != null && peca.classList.contains(pecas[i])) {
-            console.log(pecas[i]);
+            console.log('aqui estou');
             funcoesDeMovimento[pecas[i]](posicao, coluna, linha);
         }
     }
 }
 
 function movimentosTorre(posicaoOrigem, coluna, linha) {
+    let idColuna;
+    for (let x = 0; x < colunas.length; x++) {
+        if (colunas[x] == coluna) {
+            idColuna = x;
+        }
+    }
+
+    for (let i = 0; i < posicaotabuleiro.length; i++) {
+        const posicao = posicaotabuleiro[i];
+        let idPosicao = posicao.id;
+
+        //coluna para a direita
+        for (let c = idColuna; c < colunas.length; c++) {
+            console.log(idPosicao.includes(colunas[c] + linha) + " aumenta");
+            if (idPosicao.includes(colunas[c] + linha)) {
+                posicao.classList.add('movimento');
+            }
+        }
+
+        //coluna para a esquerda
+        for (let c = idColuna; c > colunas.length; c--) {
+            console.log(idPosicao + " diminui");
+            if (idPosicao.includes(colunas[c] + linha)) {
+                posicao.classList.add('movimento');
+            }
+        }
+
+    }
+    validarMovimento(posicaoOrigem);
 }
 
 function movimentosCavalo(posicaoOrigem, coluna, linha) {
@@ -78,13 +113,15 @@ function movimentosPeaoTimeA(posicaoOrigem, coluna, linha) {
     for (let i = 0; i < posicaotabuleiro.length; i++) {
         const posicao = posicaotabuleiro[i];
         let idPosicao = posicao.id;
-        if (linha == 2) {
-            if (idPosicao.includes(coluna+3) || idPosicao.includes(coluna+4)){
-                posicao.classList.add('movimento');
-            }
-        }else {
-            if (idPosicao.includes(coluna+(parseInt(linha)+1))){
-                posicao.classList.add('movimento');
+        if (posicao.querySelector('svg') == null) {
+            if (linha == 2) {
+                if (idPosicao.includes(coluna + 3) || idPosicao.includes(coluna + 4)) {
+                    posicao.classList.add('movimento');
+                }
+            } else {
+                if (idPosicao.includes(coluna + (parseInt(linha) + 1))) {
+                    posicao.classList.add('movimento');
+                }
             }
         }
     }
@@ -93,15 +130,17 @@ function movimentosPeaoTimeA(posicaoOrigem, coluna, linha) {
 
 function movimentosPeaoTimeB(posicaoOrigem, coluna, linha) {
     for (let i = 0; i < posicaotabuleiro.length; i++) {
-        const posicao = posicaotabuleiro[i];
+        let posicao = posicaotabuleiro[i];
         let idPosicao = posicao.id;
-        if (linha == 7) {
-            if (idPosicao.includes(coluna+6) || idPosicao.includes(coluna+5)){
-                posicao.classList.add('movimento');
-            }
-        }else {
-            if (idPosicao.includes(coluna+(parseInt(linha)-1))){
-                posicao.classList.add('movimento');
+        if (posicao.querySelector('svg') == null) {
+            if (linha == 7) {
+                if (idPosicao.includes(coluna + 6) || idPosicao.includes(coluna + 5)) {
+                    posicao.classList.add('movimento');
+                }
+            } else {
+                if (idPosicao.includes(coluna + (parseInt(linha) - 1))) {
+                    posicao.classList.add('movimento');
+                }
             }
         }
     }
@@ -117,20 +156,24 @@ function validarMovimento(posicaoOrigem) {
 
         posicao.addEventListener('click', function () {
             if (!movimentoRealizado) {
+                pecaSelecionada = false;
                 var destino = posicaotabuleiro[i];
                 var destinoOcupado = destino.querySelector('svg');
+                console.log(destinoOcupado != null);
 
                 //movimentar para o mesmo lugar || posição ocupada || movimento inválido
                 if (destino == posicaoOrigem || destinoOcupado != null || !destino.classList.contains('movimento')) {
+                    limparTabuleiro();
                     console.log('Movimento inválido');
                     movimentoRealizado = true;
-                    limparTabuleiro();
+
                 } else {
                     moverPeca(posicaoOrigem, destino);
-                    movimentoRealizado = true;
                     limparTabuleiro();
+                    movimentoRealizado = true;
                 }
             }
+
         });
 
         if (movimentoRealizado) {
@@ -139,13 +182,15 @@ function validarMovimento(posicaoOrigem) {
     }
 }
 
-
 function limparTabuleiro() {
-    for (let i = 0; i < posicaotabuleiro.length; i++) {
-        posicaotabuleiro[i].classList.remove('movimento');
-        posicaotabuleiro[i].classList.remove('destacar');
+    for (let j = 0; j < posicaotabuleiro.length; j++) {
+        posicaotabuleiro[j].classList.remove('movimento');
+        posicaotabuleiro[j].classList.remove('destacar');
     }
 }
+
+
+
 
 
 function moverPeca(origem, destino) {
