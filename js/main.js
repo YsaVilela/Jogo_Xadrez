@@ -178,121 +178,158 @@ function movimentosCavalo(posicaoOrigem, colunaOrigem, linhaOrigem) {
 }
 
 function movimentosBispo(posicaoOrigem, colunaOrigem, linhaOrigem) {
-        const movimentos = [];
-    
-        // Movimentos na diagonal superior esquerda
-        for (let i = 1; i < 8; i++) {
-            const novaColunaIndex = colunas.indexOf(colunaOrigem) - i;
-            const novaLinhaIndex = linhas.indexOf(linhaOrigem) - i;
-    
-            if (novaColunaIndex >= 0 && novaLinhaIndex >= 0) {
-                const novaColuna = colunas[novaColunaIndex];
-                const novaLinha = linhas[novaLinhaIndex];
-                const novaPosicao = `${novaColuna}${novaLinha}`;
+    const movimentos = [];
+
+    // Movimentos na diagonal superior esquerda
+    for (let i = 1; i < 8; i++) {
+        const novaColunaIndex = colunas.indexOf(colunaOrigem) - i;
+        const novaLinhaIndex = linhas.indexOf(linhaOrigem) - i;
+
+        if (novaColunaIndex >= 0 && novaLinhaIndex >= 0) {
+            const novaColuna = colunas[novaColunaIndex];
+            const novaLinha = linhas[novaLinhaIndex];
+            const novaPosicao = `${novaColuna}${novaLinha}`;
+            const elemento = document.getElementById(novaPosicao);
+
+            if (!elemento || !elemento.querySelector('svg')) {
+                movimentos.push(novaPosicao);
+
                 const elemento = document.getElementById(novaPosicao);
-    
-                if (!elemento || !elemento.querySelector('svg')) {
-                    movimentos.push(novaPosicao);
-    
-                    const elemento = document.getElementById(novaPosicao);
-                    if (elemento) {
-                        elemento.classList.add('movimento');
-                    }
-                } else {
-                    break;   
+                if (elemento) {
+                    elemento.classList.add('movimento');
                 }
             } else {
-                break;   
+                break;
             }
+        } else {
+            break;
         }
-    
-        // Movimentos na diagonal superior direita
-        for (let i = 1; i < 8; i++) {
-            const novaColunaIndex = colunas.indexOf(colunaOrigem) + i;
-            const novaLinhaIndex = linhas.indexOf(linhaOrigem) - i;
-    
-            if (novaColunaIndex < colunas.length && novaLinhaIndex >= 0) {
-                const novaColuna = colunas[novaColunaIndex];
-                const novaLinha = linhas[novaLinhaIndex];
-                const novaPosicao = `${novaColuna}${novaLinha}`;
+    }
+
+    // Movimentos na diagonal superior direita
+    for (let i = 1; i < 8; i++) {
+        const novaColunaIndex = colunas.indexOf(colunaOrigem) + i;
+        const novaLinhaIndex = linhas.indexOf(linhaOrigem) - i;
+
+        if (novaColunaIndex < colunas.length && novaLinhaIndex >= 0) {
+            const novaColuna = colunas[novaColunaIndex];
+            const novaLinha = linhas[novaLinhaIndex];
+            const novaPosicao = `${novaColuna}${novaLinha}`;
+            const elemento = document.getElementById(novaPosicao);
+
+            if (!elemento || !elemento.querySelector('svg')) {
+                movimentos.push(novaPosicao);
+
                 const elemento = document.getElementById(novaPosicao);
-    
-                if (!elemento || !elemento.querySelector('svg')) {
-                    movimentos.push(novaPosicao);
-    
-                    const elemento = document.getElementById(novaPosicao);
-                    if (elemento) {
-                        elemento.classList.add('movimento');
-                    }
-                } else {
-                    break; 
+                if (elemento) {
+                    elemento.classList.add('movimento');
                 }
             } else {
-                break; 
+                break;
             }
+        } else {
+            break;
         }
-    
-        // Movimentos na diagonal inferior esquerda
-        for (let i = 1; i < 8; i++) {
-            const novaColunaIndex = colunas.indexOf(colunaOrigem) - i;
-            const novaLinhaIndex = linhas.indexOf(linhaOrigem) + i;
-    
-            if (novaColunaIndex >= 0 && novaLinhaIndex < linhas.length) {
-                const novaColuna = colunas[novaColunaIndex];
-                const novaLinha = linhas[novaLinhaIndex];
-                const novaPosicao = `${novaColuna}${novaLinha}`;
+    }
+
+    // Movimentos na diagonal inferior esquerda
+    for (let i = 1; i < 8; i++) {
+        const novaColunaIndex = colunas.indexOf(colunaOrigem) - i;
+        const novaLinhaIndex = linhas.indexOf(linhaOrigem) + i;
+
+        if (novaColunaIndex >= 0 && novaLinhaIndex < linhas.length) {
+            const novaColuna = colunas[novaColunaIndex];
+            const novaLinha = linhas[novaLinhaIndex];
+            const novaPosicao = `${novaColuna}${novaLinha}`;
+            const elemento = document.getElementById(novaPosicao);
+
+            if (!elemento || !elemento.querySelector('svg')) {
+                movimentos.push(novaPosicao);
+
                 const elemento = document.getElementById(novaPosicao);
-    
-                if (!elemento || !elemento.querySelector('svg')) {
-                    movimentos.push(novaPosicao);
-    
-                    const elemento = document.getElementById(novaPosicao);
-                    if (elemento) {
-                        elemento.classList.add('movimento');
-                    }
-                } else {
-                    break; 
+                if (elemento) {
+                    elemento.classList.add('movimento');
                 }
             } else {
-                break;   
+                break;
             }
+        } else {
+            break;
         }
-    
-        // Movimentos na diagonal inferior direita
-        for (let i = 1; i < 8; i++) {
-            const novaColunaIndex = colunas.indexOf(colunaOrigem) + i;
-            const novaLinhaIndex = linhas.indexOf(linhaOrigem) + i;
-    
-            if (novaColunaIndex < colunas.length && novaLinhaIndex < linhas.length) {
-                const novaColuna = colunas[novaColunaIndex];
-                const novaLinha = linhas[novaLinhaIndex];
-                const novaPosicao = `${novaColuna}${novaLinha}`;
+    }
+
+    // Movimentos na diagonal inferior direita
+    for (let i = 1; i < 8; i++) {
+        const novaColunaIndex = colunas.indexOf(colunaOrigem) + i;
+        const novaLinhaIndex = linhas.indexOf(linhaOrigem) + i;
+
+        if (novaColunaIndex < colunas.length && novaLinhaIndex < linhas.length) {
+            const novaColuna = colunas[novaColunaIndex];
+            const novaLinha = linhas[novaLinhaIndex];
+            const novaPosicao = `${novaColuna}${novaLinha}`;
+            const elemento = document.getElementById(novaPosicao);
+
+            if (!elemento || !elemento.querySelector('svg')) {
+                movimentos.push(novaPosicao);
+
                 const elemento = document.getElementById(novaPosicao);
-    
-                if (!elemento || !elemento.querySelector('svg')) {
-                    movimentos.push(novaPosicao);
-    
-                    const elemento = document.getElementById(novaPosicao);
-                    if (elemento) {
-                        elemento.classList.add('movimento');
-                    }
-                } else {
-                    break;   
+                if (elemento) {
+                    elemento.classList.add('movimento');
                 }
             } else {
-                break;   
+                break;
             }
+        } else {
+            break;
         }
+    }
 
     validarMovimento(posicaoOrigem);
 }
 
-function movimentosRainha(posicaoOrigem, coluna, linha) {
+function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
+    const movimentosTorre = movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem);
+    const movimentosBispo = movimentosBispo(posicaoOrigem, colunaOrigem, linhaOrigem);
+    const movimentos = movimentosTorre.concat(movimentosBispo);
 
 }
 
-function movimentosRei(posicaoOrigem, coluna, linha) {
 
+function movimentosRei(posicaoOrigem, colunaOrigem, linhaOrigem) {
+    const movimentos = [];
+
+    const deslocamentos = [-1, 0, 1];
+
+    for (const dx of deslocamentos) {
+        for (const dy of deslocamentos) {
+            if (dx !== 0 || dy !== 0) {
+                const novaColunaIndex = colunas.indexOf(colunaOrigem) + dx;
+                const novaLinhaIndex = linhas.indexOf(linhaOrigem) + dy;
+
+                if (
+                    novaColunaIndex >= 0 &&
+                    novaColunaIndex < colunas.length &&
+                    novaLinhaIndex >= 0 &&
+                    novaLinhaIndex < linhas.length
+                ) {
+                    const novaColuna = colunas[novaColunaIndex];
+                    const novaLinha = linhas[novaLinhaIndex];
+                    const novaPosicao = `${novaColuna}${novaLinha}`;
+                    const elemento = document.getElementById(novaPosicao);
+
+                    if (!elemento || !elemento.querySelector('svg')) {
+                        movimentos.push(novaPosicao);
+
+                        const elemento = document.getElementById(novaPosicao);
+                        if (elemento) {
+                            elemento.classList.add('movimento');
+                        }
+                    }
+                }
+            }
+        }
+    }
+    validarMovimento(posicaoOrigem)
 }
 
 function movimentosPeaoTimeA(posicaoOrigem, coluna, linha) {
