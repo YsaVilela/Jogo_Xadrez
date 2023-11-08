@@ -64,42 +64,82 @@ function reconhecerPecaClicada(peca, posicao) {
 
 
 
-function movimentosTorre(posicaoOrigem, coluna, linha) {
-    let idColuna;
-    for (let x = 0; x < colunas.length; x++) {
-        if (colunas[x] == coluna) {
-            idColuna = x;
+function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
+    const movimentos = [];
+
+    for (let i = colunas.indexOf(colunaOrigem) - 1; i >= 0; i--) {
+        const novaColuna = colunas[i];
+        const novaPosicao = `${novaColuna}${linhaOrigem}`;
+        const elemento = document.getElementById(novaPosicao);
+
+        if (!elemento || !elemento.querySelector('svg')) {
+            movimentos.push(novaPosicao);
+
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
+        } else {
+            break;
         }
     }
 
-    for (let i = 0; i < posicaotabuleiro.length; i++) {
-        const posicao = posicaotabuleiro[i];
-        let idPosicao = posicao.id;
+    for (let i = colunas.indexOf(colunaOrigem) + 1; i < colunas.length; i++) {
+        const novaColuna = colunas[i];
+        const novaPosicao = `${novaColuna}${linhaOrigem}`;
+        const elemento = document.getElementById(novaPosicao);
 
-        if (idPosicao.includes(coluna) ^ idPosicao.includes(linha)) {
+        if (!elemento || !elemento.querySelector('svg')) {
+            movimentos.push(novaPosicao);
 
-            //para a direita
-            for (let c = idColuna; c < colunas.length; c++) {
-                if (idPosicao.includes(colunas[c] + linha)) {
-                    if (posicao.querySelector('svg') != null) {
-                        break;
-                    } else {
-                        posicao.classList.add('movimento');
-                    }
-                }
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
             }
-
-            //para a esquerda
-            for (let c = idColuna; c >= 0; c--) {
-                if (idPosicao.includes(colunas[c] + linha) && posicao.querySelector('svg') == null) {
-                    posicao.classList.add('movimento');
-                }
-                if (posicao.querySelector('svg') != null) {
-                    break;
-                }
-            }
+        } else {
+            break;
         }
     }
+
+    for (let i = linhas.indexOf(linhaOrigem) - 1; i >= 0; i--) {
+        const novaLinha = linhas[i];
+        const novaPosicao = `${colunaOrigem}${novaLinha}`;
+        const elemento = document.getElementById(novaPosicao);
+
+        if (!elemento || !elemento.querySelector('svg')) {
+            movimentos.push(novaPosicao);
+
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
+        } else {
+            break; 
+        }
+    }
+
+    for (let i = linhas.indexOf(linhaOrigem) + 1; i < linhas.length; i++) {
+        const novaLinha = linhas[i];
+        const novaPosicao = `${colunaOrigem}${novaLinha}`;
+        const elemento = document.getElementById(novaPosicao);
+
+        if (!elemento || !elemento.querySelector('svg')) {
+            movimentos.push(novaPosicao);
+
+            const elemento = document.getElementById(novaPosicao);
+            if (elemento) {
+                elemento.classList.add('movimento');
+            }
+        } else {
+            break;
+        }
+    }
+
+    const elementoOrigem = document.getElementById(posicaoOrigem);
+    if (elementoOrigem) {
+        elementoOrigem.classList.add('movimento');
+    }
+
     validarMovimento(posicaoOrigem);
 }
 
@@ -129,7 +169,6 @@ function movimentosCavalo(posicaoOrigem, colunaOrigem, linhaOrigem) {
             const novaPosicao = `${novaColuna}${novaLinha}`;
             movimentos.push(novaPosicao);
 
-            // Adicione a classe 'movimento' à posição no tabuleiro
             const elemento = document.getElementById(novaPosicao);
             if (elemento) {
                 elemento.classList.add('movimento');
@@ -137,7 +176,6 @@ function movimentosCavalo(posicaoOrigem, colunaOrigem, linhaOrigem) {
         }
     }
 
-    // Adicione a classe 'movimento' à posição de origem
     const elementoOrigem = document.getElementById(posicaoOrigem);
     if (elementoOrigem) {
         elementoOrigem.classList.add('movimento');
