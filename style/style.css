@@ -51,6 +51,7 @@
 .pecas {
     width: 85%;
     height: 85%;
+    z-index: 3;
 }
 
 .pecastimeA {
@@ -84,10 +85,53 @@
     }
 }
 
-.destacar{
-    background-color: #FF0000;
+.destacar {
+    position: relative;
 }
 
-.movimento{
-    background-color: #FF00FF;
+.destacar::before {
+    content: "";
+    position: absolute;
+    width: 95%;
+    height: 95%;
+    background-color:#299423;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2; 
+}
+
+.movimento {
+    position: relative;
+}
+
+.movimento::before {
+    content: "";
+    position: absolute;
+    width: 35%;
+    height: 35%;
+    background-color: #299423;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.captura {
+    position: relative;
+}
+
+.captura::before {
+    content: "";
+    position: absolute;
+    width: 95%;
+    height: 95%;
+    background-color:#299423;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2; 
 }

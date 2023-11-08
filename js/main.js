@@ -94,7 +94,11 @@ function movimentosCavalo(posicaoOrigem, colunaOrigem, linhaOrigem) {
             if (elemento) {
                 const pecaCaminho = elemento.querySelector('svg');
 
-                if (!pecaCaminho || !pecaCaminho.classList.contains(jogadorAtual)) {
+                if (!pecaCaminho) {
+                    elemento.classList.add('movimento');
+
+                } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+                    elemento.classList.add('captura');
                     elemento.classList.add('movimento');
                 }
             }
@@ -127,6 +131,7 @@ function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
         } else {
             const elemento = document.getElementById(novaPosicao);
             if (elemento) {
+                elemento.classList.add('captura');
                 elemento.classList.add('movimento');
             }
             break;
@@ -152,6 +157,7 @@ function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
         } else {
             const elemento = document.getElementById(novaPosicao);
             if (elemento) {
+                elemento.classList.add('captura');
                 elemento.classList.add('movimento');
             }
             break;
@@ -177,6 +183,7 @@ function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
         } else {
             const elemento = document.getElementById(novaPosicao);
             if (elemento) {
+                elemento.classList.add('captura');
                 elemento.classList.add('movimento');
             }
             break;
@@ -188,7 +195,6 @@ function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
         const novaLinha = linhas[i];
         const novaPosicao = `${colunaOrigem}${novaLinha}`;
         const elemento = document.getElementById(novaPosicao);
-        const pecaCaminho = elemento.querySelector('svg');
 
         if (!elemento || !pecaCaminho) {
             movimentos.push(novaPosicao);
@@ -202,6 +208,7 @@ function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
         } else {
             const elemento = document.getElementById(novaPosicao);
             if (elemento) {
+                elemento.classList.add('captura');
                 elemento.classList.add('movimento');
             }
             break;
@@ -224,17 +231,22 @@ function movimentosBispo(posicaoOrigem, colunaOrigem, linhaOrigem) {
             const novaPosicao = `${novaColuna}${novaLinha}`;
             const elemento = document.getElementById(novaPosicao);
 
-            if (!elemento || !elemento.querySelector('svg')) {
-                movimentos.push(novaPosicao);
+            movimentos.push(novaPosicao);
 
-                if (elemento) {
+            if (elemento) {
+                const pecaCaminho = elemento.querySelector('svg');
+
+                if (!pecaCaminho) {
                     elemento.classList.add('movimento');
+
+                } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+                    elemento.classList.add('captura');
+                    elemento.classList.add('movimento');
+                    break;
+                } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+                    break;
                 }
-            } else {
-                break;
             }
-        } else {
-            break;
         }
     }
 
@@ -244,24 +256,28 @@ function movimentosBispo(posicaoOrigem, colunaOrigem, linhaOrigem) {
         const novaColunaIndex = colunas.indexOf(colunaOrigem) + i;
         const novaLinhaIndex = linhas.indexOf(linhaOrigem) - i;
 
-        if (novaColunaIndex < colunas.length && novaLinhaIndex >= 0) {
+        if (novaColunaIndex >= 0 && novaLinhaIndex >= 0) {
             const novaColuna = colunas[novaColunaIndex];
             const novaLinha = linhas[novaLinhaIndex];
             const novaPosicao = `${novaColuna}${novaLinha}`;
             const elemento = document.getElementById(novaPosicao);
 
-            if (!elemento || !elemento.querySelector('svg')) {
-                movimentos.push(novaPosicao);
+            movimentos.push(novaPosicao);
 
-                const elemento = document.getElementById(novaPosicao);
-                if (elemento) {
+            if (elemento) {
+                const pecaCaminho = elemento.querySelector('svg');
+
+                if (!pecaCaminho) {
                     elemento.classList.add('movimento');
+
+                } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+                    elemento.classList.add('captura');
+                    elemento.classList.add('movimento');
+                    break;
+                } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+                    break;
                 }
-            } else {
-                break;
             }
-        } else {
-            break;
         }
     }
 
@@ -270,24 +286,28 @@ function movimentosBispo(posicaoOrigem, colunaOrigem, linhaOrigem) {
         const novaColunaIndex = colunas.indexOf(colunaOrigem) - i;
         const novaLinhaIndex = linhas.indexOf(linhaOrigem) + i;
 
-        if (novaColunaIndex < colunas.length && novaLinhaIndex < linhas.length) {
+        if (novaColunaIndex >= 0 && novaLinhaIndex >= 0) {
             const novaColuna = colunas[novaColunaIndex];
             const novaLinha = linhas[novaLinhaIndex];
             const novaPosicao = `${novaColuna}${novaLinha}`;
             const elemento = document.getElementById(novaPosicao);
 
-            if (!elemento || !elemento.querySelector('svg')) {
-                movimentos.push(novaPosicao);
+            movimentos.push(novaPosicao);
 
-                const elemento = document.getElementById(novaPosicao);
-                if (elemento) {
+            if (elemento) {
+                const pecaCaminho = elemento.querySelector('svg');
+
+                if (!pecaCaminho) {
                     elemento.classList.add('movimento');
+
+                } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+                    elemento.classList.add('captura');
+                    elemento.classList.add('movimento');
+                    break;
+                } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+                    break;
                 }
-            } else {
-                break;
             }
-        } else {
-            break;
         }
     }
 
@@ -297,24 +317,28 @@ function movimentosBispo(posicaoOrigem, colunaOrigem, linhaOrigem) {
         const novaColunaIndex = colunas.indexOf(colunaOrigem) + i;
         const novaLinhaIndex = linhas.indexOf(linhaOrigem) + i;
 
-        if (novaColunaIndex < colunas.length && novaLinhaIndex < linhas.length) {
+        if (novaColunaIndex >= 0 && novaLinhaIndex >= 0) {
             const novaColuna = colunas[novaColunaIndex];
             const novaLinha = linhas[novaLinhaIndex];
             const novaPosicao = `${novaColuna}${novaLinha}`;
             const elemento = document.getElementById(novaPosicao);
 
-            if (!elemento || !elemento.querySelector('svg')) {
-                movimentos.push(novaPosicao);
+            movimentos.push(novaPosicao);
 
-                const elemento = document.getElementById(novaPosicao);
-                if (elemento) {
+            if (elemento) {
+                const pecaCaminho = elemento.querySelector('svg');
+
+                if (!pecaCaminho) {
                     elemento.classList.add('movimento');
+
+                } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+                    elemento.classList.add('captura');
+                    elemento.classList.add('movimento');
+                    break;
+                } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+                    break;
                 }
-            } else {
-                break;
             }
-        } else {
-            break;
         }
     }
 
@@ -343,6 +367,7 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
         } else {
             const elemento = document.getElementById(novaPosicao);
             if (elemento) {
+                elemento.classList.add('captura');
                 elemento.classList.add('movimento');
             }
             break;
@@ -369,6 +394,7 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
         } else {
             const elemento = document.getElementById(novaPosicao);
             if (elemento) {
+                elemento.classList.add('captura');
                 elemento.classList.add('movimento');
             }
             break;
@@ -394,6 +420,7 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
         } else {
             const elemento = document.getElementById(novaPosicao);
             if (elemento) {
+                elemento.classList.add('captura');
                 elemento.classList.add('movimento');
             }
             break;
@@ -419,6 +446,7 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
         } else {
             const elemento = document.getElementById(novaPosicao);
             if (elemento) {
+                elemento.classList.add('captura');
                 elemento.classList.add('movimento');
             }
             break;
@@ -436,15 +464,19 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
             const novaPosicao = `${novaColuna}${novaLinha}`;
             const elemento = document.getElementById(novaPosicao);
 
-            if (!elemento || !elemento.querySelector('svg')) {
-                movimentos.push(novaPosicao);
+            if (elemento) {
+                const pecaCaminho = elemento.querySelector('svg');
 
-                const elemento = document.getElementById(novaPosicao);
-                if (elemento) {
+                if (!pecaCaminho) {
                     elemento.classList.add('movimento');
+
+                } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+                    elemento.classList.add('captura');
+                    elemento.classList.add('movimento');
+                    break;
+                } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+                    break;
                 }
-            } else {
-                break;
             }
         } else {
             break;
@@ -462,15 +494,19 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
             const novaPosicao = `${novaColuna}${novaLinha}`;
             const elemento = document.getElementById(novaPosicao);
 
-            if (!elemento || !elemento.querySelector('svg')) {
-                movimentos.push(novaPosicao);
+            if (elemento) {
+                const pecaCaminho = elemento.querySelector('svg');
 
-                const elemento = document.getElementById(novaPosicao);
-                if (elemento) {
+                if (!pecaCaminho) {
                     elemento.classList.add('movimento');
+
+                } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+                    elemento.classList.add('captura');
+                    elemento.classList.add('movimento');
+                    break;
+                } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+                    break;
                 }
-            } else {
-                break;
             }
         } else {
             break;
@@ -480,7 +516,7 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
     // Movimentos na diagonal inferior esquerda
     for (let i = 1; i < 8; i++) {
         const novaColunaIndex = colunas.indexOf(colunaOrigem) - i;
-        const novaLinhaIndex = linhas.indexOf(linhaOrigem) - i;
+        const novaLinhaIndex = linhas.indexOf(linhaOrigem) + i;
 
         if (novaColunaIndex < colunas.length && novaLinhaIndex >= 0) {
             const novaColuna = colunas[novaColunaIndex];
@@ -488,15 +524,19 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
             const novaPosicao = `${novaColuna}${novaLinha}`;
             const elemento = document.getElementById(novaPosicao);
 
-            if (!elemento || !elemento.querySelector('svg')) {
-                movimentos.push(novaPosicao);
+            if (elemento) {
+                const pecaCaminho = elemento.querySelector('svg');
 
-                const elemento = document.getElementById(novaPosicao);
-                if (elemento) {
+                if (!pecaCaminho) {
                     elemento.classList.add('movimento');
+
+                } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+                    elemento.classList.add('captura');
+                    elemento.classList.add('movimento');
+                    break;
+                } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+                    break;
                 }
-            } else {
-                break;
             }
         } else {
             break;
@@ -514,15 +554,19 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
             const novaPosicao = `${novaColuna}${novaLinha}`;
             const elemento = document.getElementById(novaPosicao);
 
-            if (!elemento || !elemento.querySelector('svg')) {
-                movimentos.push(novaPosicao);
+            if (elemento) {
+                const pecaCaminho = elemento.querySelector('svg');
 
-                const elemento = document.getElementById(novaPosicao);
-                if (elemento) {
+                if (!pecaCaminho) {
                     elemento.classList.add('movimento');
+
+                } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+                    elemento.classList.add('captura');
+                    elemento.classList.add('movimento');
+                    break;
+                } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+                    break;
                 }
-            } else {
-                break;
             }
         } else {
             break;
@@ -554,11 +598,14 @@ function movimentosRei(posicaoOrigem, colunaOrigem, linhaOrigem) {
                     const novaPosicao = `${novaColuna}${novaLinha}`;
                     const elemento = document.getElementById(novaPosicao);
 
-                    if (!elemento || !elemento.querySelector('svg')) {
-                        movimentos.push(novaPosicao);
-
-                        const elemento = document.getElementById(novaPosicao);
-                        if (elemento) {
+                    if (elemento) {
+                        const pecaCaminho = elemento.querySelector('svg');
+        
+                        if (!pecaCaminho) {
+                            elemento.classList.add('movimento');
+        
+                        } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+                            elemento.classList.add('captura');
                             elemento.classList.add('movimento');
                         }
                     }
@@ -707,6 +754,7 @@ function limparTabuleiro() {
     for (let j = 0; j < posicaotabuleiro.length; j++) {
         posicaotabuleiro[j].classList.remove('movimento');
         posicaotabuleiro[j].classList.remove('destacar');
+        posicaotabuleiro[j].classList.remove('captura');
     }
 }
 
