@@ -119,21 +119,14 @@ function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
         const elemento = document.getElementById(novaPosicao);
         const pecaCaminho = elemento.querySelector('svg');
 
-        if (!elemento || !pecaCaminho) {
-            movimentos.push(novaPosicao);
+        if (!pecaCaminho) {
+            elemento.classList.add('movimento');
 
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('movimento');
-            }
-        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+        } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+            elemento.classList.add('captura');
+            elemento.classList.add('movimento');
             break;
-        } else {
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('captura');
-                elemento.classList.add('movimento');
-            }
+        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
             break;
         }
     }
@@ -145,21 +138,14 @@ function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
         const elemento = document.getElementById(novaPosicao);
         const pecaCaminho = elemento.querySelector('svg');
 
-        if (!elemento || !pecaCaminho) {
-            movimentos.push(novaPosicao);
+        if (!pecaCaminho) {
+            elemento.classList.add('movimento');
 
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('movimento');
-            }
-        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+        } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+            elemento.classList.add('captura');
+            elemento.classList.add('movimento');
             break;
-        } else {
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('captura');
-                elemento.classList.add('movimento');
-            }
+        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
             break;
         }
     }
@@ -171,21 +157,14 @@ function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
         const elemento = document.getElementById(novaPosicao);
         const pecaCaminho = elemento.querySelector('svg');
 
-        if (!elemento || !pecaCaminho) {
-            movimentos.push(novaPosicao);
+        if (!pecaCaminho) {
+            elemento.classList.add('movimento');
 
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('movimento');
-            }
-        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+        } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+            elemento.classList.add('captura');
+            elemento.classList.add('movimento');
             break;
-        } else {
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('captura');
-                elemento.classList.add('movimento');
-            }
+        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
             break;
         }
     }
@@ -196,22 +175,19 @@ function movimentosTorre(posicaoOrigem, colunaOrigem, linhaOrigem) {
         const novaPosicao = `${colunaOrigem}${novaLinha}`;
         const elemento = document.getElementById(novaPosicao);
 
-        if (!elemento || !pecaCaminho) {
-            movimentos.push(novaPosicao);
+        if (elemento) {
+            const pecaCaminho = elemento.querySelector('svg');
 
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
+            if (!pecaCaminho) {
                 elemento.classList.add('movimento');
-            }
-        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
-            break;
-        } else {
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
+
+            } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
                 elemento.classList.add('captura');
                 elemento.classList.add('movimento');
+                break;
+            } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+                break;
             }
-            break;
         }
     }
     validarMovimento(posicaoOrigem);
@@ -355,21 +331,14 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
         const elemento = document.getElementById(novaPosicao);
         const pecaCaminho = elemento.querySelector('svg');
 
-        if (!elemento || !pecaCaminho) {
-            movimentos.push(novaPosicao);
+        if (!pecaCaminho) {
+            elemento.classList.add('movimento');
 
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('movimento');
-            }
-        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+        } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+            elemento.classList.add('captura');
+            elemento.classList.add('movimento');
             break;
-        } else {
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('captura');
-                elemento.classList.add('movimento');
-            }
+        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
             break;
         }
     }
@@ -382,21 +351,14 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
         const elemento = document.getElementById(novaPosicao);
         const pecaCaminho = elemento.querySelector('svg');
 
-        if (!elemento || !pecaCaminho) {
-            movimentos.push(novaPosicao);
+        if (!pecaCaminho) {
+            elemento.classList.add('movimento');
 
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('movimento');
-            }
-        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+        } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+            elemento.classList.add('captura');
+            elemento.classList.add('movimento');
             break;
-        } else {
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('captura');
-                elemento.classList.add('movimento');
-            }
+        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
             break;
         }
     }
@@ -408,21 +370,14 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
         const elemento = document.getElementById(novaPosicao);
         const pecaCaminho = elemento.querySelector('svg');
 
-        if (!elemento || !pecaCaminho) {
-            movimentos.push(novaPosicao);
+        if (!pecaCaminho) {
+            elemento.classList.add('movimento');
 
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('movimento');
-            }
-        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+        } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+            elemento.classList.add('captura');
+            elemento.classList.add('movimento');
             break;
-        } else {
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('captura');
-                elemento.classList.add('movimento');
-            }
+        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
             break;
         }
     }
@@ -434,21 +389,14 @@ function movimentosRainha(posicaoOrigem, colunaOrigem, linhaOrigem) {
         const elemento = document.getElementById(novaPosicao);
         const pecaCaminho = elemento.querySelector('svg');
 
-        if (!elemento || !pecaCaminho) {
-            movimentos.push(novaPosicao);
+        if (!pecaCaminho) {
+            elemento.classList.add('movimento');
 
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('movimento');
-            }
-        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
+        } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+            elemento.classList.add('captura');
+            elemento.classList.add('movimento');
             break;
-        } else {
-            const elemento = document.getElementById(novaPosicao);
-            if (elemento) {
-                elemento.classList.add('captura');
-                elemento.classList.add('movimento');
-            }
+        } else if (pecaCaminho.classList.contains(jogadorAtual)) {
             break;
         }
     }
@@ -600,10 +548,10 @@ function movimentosRei(posicaoOrigem, colunaOrigem, linhaOrigem) {
 
                     if (elemento) {
                         const pecaCaminho = elemento.querySelector('svg');
-        
+
                         if (!pecaCaminho) {
                             elemento.classList.add('movimento');
-        
+
                         } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
                             elemento.classList.add('captura');
                             elemento.classList.add('movimento');
@@ -651,6 +599,41 @@ function movimentosPeaoTimeA(posicaoOrigem, colunaOrigem, linhaOrigem) {
             }
         }
     }
+
+    // Movimentos de captura à esquerda
+    const colunaEsquerda = colunas.indexOf(colunaOrigem) - 1;
+    if (colunaEsquerda >= 0) {
+        const novaColunaEsquerda = colunas[colunaEsquerda];
+        const novaLinhaEsquerda = linhaOrigem + 1;
+        const novaPosicaoEsquerda = `${novaColunaEsquerda}${novaLinhaEsquerda}`;
+        const elementoEsquerda = document.getElementById(novaPosicaoEsquerda);
+
+        if (elementoEsquerda && elementoEsquerda.querySelector('svg')) {
+            movimentos.push(novaPosicaoEsquerda);
+
+            if (elementoEsquerda) {
+                elementoEsquerda.classList.add('movimento');
+            }
+        }
+    }
+
+    // Movimentos de captura à direita
+    const colunaDireita = colunas.indexOf(colunaOrigem) + 1;
+    if (colunaDireita < colunas.length) {
+        const novaColunaDireita = colunas[colunaDireita];
+        const novaLinhaDireita = linhaOrigem + 1;
+        const novaPosicaoDireita = `${novaColunaDireita}${novaLinhaDireita}`;
+        const elementoDireita = document.getElementById(novaPosicaoDireita);
+
+        if (elementoDireita && elementoDireita.querySelector('svg')) {
+            movimentos.push(novaPosicaoDireita);
+
+            if (elementoDireita) {
+                elementoDireita.classList.add('movimento');
+            }
+        }
+    }
+
     validarMovimento(posicaoOrigem);
 }
 
@@ -697,13 +680,20 @@ function capturaPeao() {
 }
 
 function captura(posicaoOrigem, posicaoDestino) {
-    const pecaCaptura = posicaoDestino.querySelector('svg');
-    posicaoDestino.removeChild(pecaCaptura);
+    const pecaCapturada = posicaoDestino.querySelector('svg');
+    posicaoDestino.removeChild(pecaCapturada);
     const pecaPromovida = posicaoOrigem.querySelector('svg');
     posicaoDestino.appendChild(pecaPromovida);
     jogadorAtual = jogadorAtual === 'timeA' ? 'timeB' : 'timeA';
+    let nomePecaCapturada = null;
 
-    console.log('captura de outras pecas');
+    for (let i = 0; i < pecas.length; i++) {
+        if (pecaCapturada.classList.contains(pecas[i])) {
+            nomePecaCapturada = pecas[i];
+        }
+    }
+
+    console.log(nomePecaCapturada + ' capturada');
 }
 
 
@@ -726,6 +716,8 @@ function validarMovimento(posicaoOrigem) {
                     limparTabuleiro();
                     if (!pecaDestino.classList.contains(jogadorAtual) && !pecaOrigem.classList.contains('peao')) {
                         captura(posicaoOrigem, destino);
+                    } else if (pecaOrigem.classList.contains('peao')) {
+                        capturaPeao(posicaoOrigem, destino);
                     } else {
                         console.log('Movimento inválido');
                     }
