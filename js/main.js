@@ -604,15 +604,16 @@ function movimentosPeaoTimeA(posicaoOrigem, colunaOrigem, linhaOrigem) {
     const colunaEsquerda = colunas.indexOf(colunaOrigem) - 1;
     if (colunaEsquerda >= 0) {
         const novaColunaEsquerda = colunas[colunaEsquerda];
-        const novaLinhaEsquerda = linhaOrigem + 1;
+        const novaLinhaEsquerda = parseInt(linhaOrigem) + 1;
         const novaPosicaoEsquerda = `${novaColunaEsquerda}${novaLinhaEsquerda}`;
         const elementoEsquerda = document.getElementById(novaPosicaoEsquerda);
 
         if (elementoEsquerda && elementoEsquerda.querySelector('svg')) {
-            movimentos.push(novaPosicaoEsquerda);
-
-            if (elementoEsquerda) {
+            const pecaElementoEsqueda = elementoEsquerda.querySelector('svg')
+            if (!pecaElementoEsqueda.classList.contains(jogadorAtual)) {
+                movimentos.push(novaPosicaoEsquerda);
                 elementoEsquerda.classList.add('movimento');
+                elementoEsquerda.classList.add('captura');
             }
         }
     }
@@ -621,15 +622,16 @@ function movimentosPeaoTimeA(posicaoOrigem, colunaOrigem, linhaOrigem) {
     const colunaDireita = colunas.indexOf(colunaOrigem) + 1;
     if (colunaDireita < colunas.length) {
         const novaColunaDireita = colunas[colunaDireita];
-        const novaLinhaDireita = linhaOrigem + 1;
+        const novaLinhaDireita = parseInt(linhaOrigem) + 1;
         const novaPosicaoDireita = `${novaColunaDireita}${novaLinhaDireita}`;
         const elementoDireita = document.getElementById(novaPosicaoDireita);
 
         if (elementoDireita && elementoDireita.querySelector('svg')) {
-            movimentos.push(novaPosicaoDireita);
-
-            if (elementoDireita) {
+            const pecaElementoDireita = elementoDireita.querySelector('svg')
+            if (!pecaElementoDireita.classList.contains(jogadorAtual)) {
+                movimentos.push(novaPosicaoDireita);
                 elementoDireita.classList.add('movimento');
+                elementoDireita.classList.add('captura');
             }
         }
     }
@@ -672,12 +674,45 @@ function movimentosPeaoTimeB(posicaoOrigem, colunaOrigem, linhaOrigem) {
             }
         }
     }
+
+    // Movimentos de captura à esquerda
+    const colunaEsquerda = colunas.indexOf(colunaOrigem) - 1;
+    if (colunaEsquerda >= 0) {
+        const novaColunaEsquerda = colunas[colunaEsquerda];
+        const novaLinhaEsquerda = parseInt(linhaOrigem) - 1;
+        const novaPosicaoEsquerda = `${novaColunaEsquerda}${novaLinhaEsquerda}`;
+        const elementoEsquerda = document.getElementById(novaPosicaoEsquerda);
+
+        if (elementoEsquerda && elementoEsquerda.querySelector('svg')) {
+            const pecaElementoEsqueda = elementoEsquerda.querySelector('svg')
+            if (!pecaElementoEsqueda.classList.contains(jogadorAtual)) {
+                movimentos.push(novaPosicaoEsquerda);
+                elementoEsquerda.classList.add('movimento');
+                elementoEsquerda.classList.add('captura');
+            }
+        }
+    }
+
+    // Movimentos de captura à direita
+    const colunaDireita = colunas.indexOf(colunaOrigem) + 1;
+    if (colunaDireita < colunas.length) {
+        const novaColunaDireita = colunas[colunaDireita];
+        const novaLinhaDireita = parseInt(linhaOrigem) - 1;
+        const novaPosicaoDireita = `${novaColunaDireita}${novaLinhaDireita}`;
+        const elementoDireita = document.getElementById(novaPosicaoDireita);
+
+        if (elementoDireita && elementoDireita.querySelector('svg')) {
+            const pecaElementoDireita = elementoDireita.querySelector('svg')
+            if (!pecaElementoDireita.classList.contains(jogadorAtual)) {
+                movimentos.push(novaPosicaoDireita);
+                elementoDireita.classList.add('movimento');
+                elementoDireita.classList.add('captura');
+            }
+        }
+    }
     validarMovimento(posicaoOrigem);
 }
 
-function capturaPeao() {
-    console.log('captura do peão');
-}
 
 function captura(posicaoOrigem, posicaoDestino) {
     const pecaCapturada = posicaoDestino.querySelector('svg');
@@ -712,15 +747,9 @@ function validarMovimento(posicaoOrigem) {
                 movimentoRealizado = true;
 
                 //captura
-                if (pecaDestino != null && destino.classList.contains('movimento')) {
+                if (pecaDestino != null && destino.classList.contains('captura')) {
                     limparTabuleiro();
-                    if (!pecaDestino.classList.contains(jogadorAtual) && !pecaOrigem.classList.contains('peao')) {
-                        captura(posicaoOrigem, destino);
-                    } else if (pecaOrigem.classList.contains('peao')) {
-                        capturaPeao(posicaoOrigem, destino);
-                    } else {
-                        console.log('Movimento inválido');
-                    }
+                    captura(posicaoOrigem, destino);
                 }
 
                 //movimentar para o mesmo lugar || movimento inválido
