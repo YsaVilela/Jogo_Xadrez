@@ -15,6 +15,10 @@ const funcoesDeMovimento = {
 
 const posicaotabuleiro = document.querySelectorAll('.posicao');
 let pecaSelecionada = false;
+let roqueTimeA = true;
+let roqueTimeB = true;
+let roqueValidoA = false;
+let roqueValidoB = false;
 
 let jogadorAtual = 'timeA'; // Comece com o jogador 'time A'
 
@@ -561,6 +565,18 @@ function movimentosRei(posicaoOrigem, colunaOrigem, linhaOrigem) {
             }
         }
     }
+
+    var pecaOrigem = posicaoOrigem.querySelector('svg');
+
+    if (pecaOrigem.classList.contains('timeA') && roqueTimeA) {
+        const elemento = document.getElementById('G1');
+        elemento.classList.add('movimento');
+        roqueValidoA = true;
+    } else if (pecaOrigem.classList.contains('timeB') && roqueTimeB) {
+        const elemento = document.getElementById('G8');
+        elemento.classList.add('movimento');
+        roqueValidoB = true;
+    }
     validarMovimento(posicaoOrigem)
 }
 
@@ -719,15 +735,14 @@ function captura(posicaoOrigem, posicaoDestino) {
     posicaoDestino.removeChild(pecaCapturada);
     const pecaPromovida = posicaoOrigem.querySelector('svg');
     posicaoDestino.appendChild(pecaPromovida);
-    jogadorAtual = jogadorAtual === 'timeA' ? 'timeB' : 'timeA';
+    passarVez();
+    
     let nomePecaCapturada = null;
-
     for (let i = 0; i < pecas.length; i++) {
         if (pecaCapturada.classList.contains(pecas[i])) {
             nomePecaCapturada = pecas[i];
         }
     }
-
     console.log(nomePecaCapturada + ' capturada');
 }
 
@@ -737,13 +752,16 @@ function validarMovimento(posicaoOrigem) {
 
     for (let i = 0; i < posicaotabuleiro.length; i++) {
         const posicao = posicaotabuleiro[i];
+        const idPosicaoOrigem = posicaoOrigem.id;
+
+        var pecaOrigem = posicaoOrigem.querySelector('svg');
 
         posicao.addEventListener('click', function () {
+
             if (!movimentoRealizado) {
                 pecaSelecionada = false;
                 var destino = posicaotabuleiro[i];
                 var pecaDestino = destino.querySelector('svg');
-                var pecaOrigem = posicaoOrigem.querySelector('svg')
                 movimentoRealizado = true;
 
                 //captura
@@ -757,7 +775,31 @@ function validarMovimento(posicaoOrigem) {
                     limparTabuleiro();
                     console.log('Movimento inválido');
 
+                } else if (roqueValidoA == true) {
+                    const idDestino = destino.id;
+                    if (idDestino == 'G1') {
+                        const posicaoTorre = document.getElementById('H1');
+                        const torre = posicaoTorre.querySelector('svg');
+                        const rei = posicaoOrigem.querySelector('svg');
+                        destino.appendChild(rei);
+                        const destinoTorre = document.getElementById('F1');
+                        destinoTorre.appendChild(torre);
+
+
+                        passarVez();
+                        limparTabuleiro();
+                    }
                 } else {
+
+                    if (pecaOrigem.classList.contains('rei') || pecaOrigem.classList.contains('torre')) {
+                        if (idPosicaoOrigem == 'E1' || idPosicaoOrigem == 'H1') {
+                            roqueTimeA = false;
+                        }
+                        if (idPosicaoOrigem == 'E8' || idPosicaoOrigem == 'H8') {
+                            roqueTimeB = false;
+                        }
+                    }
+
                     moverPeca(posicaoOrigem, destino);
                     limparTabuleiro();
                 }
@@ -779,8 +821,12 @@ function limparTabuleiro() {
     }
 }
 
-function moverPeca(origem, destino) {
-    jogadorAtual = jogadorAtual === 'timeA' ? 'timeB' : 'timeA';
-    const peca = origem.querySelector('svg');
+function moverPeca(posicaoOrigem, destino) {
+    passarVez()
+    const peca = posicaoOrigem.querySelector('svg');
     destino.appendChild(peca);
+}
+
+function passarVez() {
+    jogadorAtual = jogadorAtual === 'timeA' ? 'timeB' : 'timeA';
 }
