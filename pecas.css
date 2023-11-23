@@ -1,0 +1,77 @@
+.torreTimeB {
+    content: url('./imgPecasPretas/torre.svg');
+    background-size: auto;
+    background-repeat: no-repeat;
+}
+
+.cavaloTimeB{
+    content: url('./imgPecasPretas/cavalo.svg');
+    background-size: auto;
+    background-repeat: no-repeat;
+}
+
+.bispoTimeB{
+    content: url('./imgPecasPretas/bispo.svg');
+    background-size: auto;
+    background-repeat: no-repeat;
+}
+
+.peaoTimeB{
+    content: url('./imgPecasPretas/peao.svg');
+    background-size: auto;
+    background-repeat: no-repeat;
+}
+
+.rainhaTimeB{
+    content: url('./imgPecasPretas/rainha.svg');
+    background-size: auto;
+    background-repeat: no-repeat;
+}
+
+.reiTimeB{
+    content: url('./imgPecasPretas/rei.svg');
+    background-size: auto;
+    background-repeat: no-repeat;
+}
+
+
+
+
+.torreTimeA {
+    content: url('./imgPecasBrancas/torre.svg');
+    background-size: auto;
+    background-repeat: no-repeat;
+}
+
+.cavaloTimeA{
+    content: url('./imgPecasBrancas/cavalo.svg');
+    background-size: auto;
+    background-repeat: no-repeat;
+}
+
+.bispoTimeA{
+    content: url('./imgPecasBrancas/bispo.svg');
+    background-size: auto;
+    background-repeat: no-repeat;
+}
+
+.peaoTimeA{
+    content: url('./imgPecasBrancas/peao.svg');
+    background-size: auto;
+    background-repeat: no-repeat;
+}
+
+.rainhaTimeA{
+    content: url('./imgPecasBrancas/rainha.svg');
+    background-size: auto;
+    background-repeat: no-repeat;
+}
+
+.reiTimeA{
+    content: url('./imgPecasBrancas/rei.svg');
+    background-size: auto;
+    background-repeat: no-repeat;
+}
+
+
+

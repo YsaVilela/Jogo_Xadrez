@@ -15,9 +15,11 @@ const funcoesDeMovimento = {
 
 const posicaotabuleiro = document.querySelectorAll('.posicao');
 let pecaSelecionada = false;
-let roqueTimeA = true;
-let roqueTimeB = true;
-let roqueValidoA = false;
+let roqueTimeADireito = true;
+let roqueTimeAEsquerdo = true;
+let roqueTimeBDireito = true;
+let roqueValidoADireito = false;
+let roqueValidoAEsquerdo = false;
 let roqueValidoB = false;
 
 let jogadorAtual = 'timeA'; // Comece com o jogador 'time A'
@@ -26,7 +28,7 @@ for (let i = 0; i < posicaotabuleiro.length; i++) {
     const posicao = posicaotabuleiro[i];
 
     posicao.addEventListener('click', function () {
-        const peca = posicao.querySelector('svg');
+        const peca = posicao.querySelector('.peca');
 
         if (peca && peca.classList.contains(jogadorAtual)) {
             for (let j = 0; j < posicaotabuleiro.length; j++) {
@@ -567,16 +569,35 @@ function movimentosRei(posicaoOrigem, colunaOrigem, linhaOrigem) {
     }
 
     var pecaOrigem = posicaoOrigem.querySelector('svg');
+    console.log(!posicaotabuleiro[47].querySelector('svg') + ' F1');
+    console.log(!posicaotabuleiro[55].querySelector('svg') + ' G1');
 
-    if (pecaOrigem.classList.contains('timeA') && roqueTimeA) {
-        const elemento = document.getElementById('G1');
-        elemento.classList.add('movimento');
-        roqueValidoA = true;
-    } else if (pecaOrigem.classList.contains('timeB') && roqueTimeB) {
-        const elemento = document.getElementById('G8');
-        elemento.classList.add('movimento');
-        roqueValidoB = true;
+    if (pecaOrigem.classList.contains('timeA') && roqueTimeADireito) {
+        //posição 47 = F1 && posição 55 = G1
+        if (!posicaotabuleiro[47].querySelector('svg') && !posicaotabuleiro[55].querySelector('svg')) {
+            const elemento = document.getElementById('G1');
+            elemento.classList.add('movimento');
+            roqueValidoADireito = true;
+        }
     }
+    if (pecaOrigem.classList.contains('timeA') && roqueTimeAEsquerdo) {
+        //posição  15 = B1 && posição 23 = C1 && posição 31 = D1
+        if (!posicaotabuleiro[15].querySelector('svg') && !posicaotabuleiro[23].querySelector('svg') && !posicaotabuleiro[31].querySelector('svg')) {
+            const elemento = document.getElementById('C1');
+            elemento.classList.add('movimento');
+            roqueValidoAEsquerdo = true;
+        }
+    }
+
+    if (pecaOrigem.classList.contains('timeB') && roqueTimeBDireito) {
+        //posição 40 = F8 && posição 48 = G8
+        if (!posicaotabuleiro[40].querySelector('svg') && !posicaotabuleiro[48].querySelector('svg')) {
+            const elemento = document.getElementById('G8');
+            elemento.classList.add('movimento');
+            roqueValidoB = true;
+        }
+    }
+
     validarMovimento(posicaoOrigem)
 }
 
@@ -736,7 +757,7 @@ function captura(posicaoOrigem, posicaoDestino) {
     const pecaPromovida = posicaoOrigem.querySelector('svg');
     posicaoDestino.appendChild(pecaPromovida);
     passarVez();
-    
+
     let nomePecaCapturada = null;
     for (let i = 0; i < pecas.length; i++) {
         if (pecaCapturada.classList.contains(pecas[i])) {
@@ -775,31 +796,24 @@ function validarMovimento(posicaoOrigem) {
                     limparTabuleiro();
                     console.log('Movimento inválido');
 
-                } else if (roqueValidoA == true) {
+                } else if (roqueValidoADireito || roqueValidoAEsquerdo) {
+                    roqueA(posicaoOrigem, destino);
+
+                } else if (roqueValidoB) {
                     const idDestino = destino.id;
-                    if (idDestino == 'G1') {
-                        const posicaoTorre = document.getElementById('H1');
+                    if (idDestino == 'G8') {
+                        const posicaoTorre = document.getElementById('H8');
                         const torre = posicaoTorre.querySelector('svg');
                         const rei = posicaoOrigem.querySelector('svg');
                         destino.appendChild(rei);
-                        const destinoTorre = document.getElementById('F1');
+                        const destinoTorre = document.getElementById('F8');
                         destinoTorre.appendChild(torre);
-
 
                         passarVez();
                         limparTabuleiro();
                     }
                 } else {
-
-                    if (pecaOrigem.classList.contains('rei') || pecaOrigem.classList.contains('torre')) {
-                        if (idPosicaoOrigem == 'E1' || idPosicaoOrigem == 'H1') {
-                            roqueTimeA = false;
-                        }
-                        if (idPosicaoOrigem == 'E8' || idPosicaoOrigem == 'H8') {
-                            roqueTimeB = false;
-                        }
-                    }
-
+                    validarRoque(pecaOrigem, idPosicaoOrigem);
                     moverPeca(posicaoOrigem, destino);
                     limparTabuleiro();
                 }
@@ -829,4 +843,85 @@ function moverPeca(posicaoOrigem, destino) {
 
 function passarVez() {
     jogadorAtual = jogadorAtual === 'timeA' ? 'timeB' : 'timeA';
+}
+
+function validarRoque(pecaOrigem, idPosicaoOrigem) {
+    if (pecaOrigem.classList.contains('rei') || pecaOrigem.classList.contains('torre')) {
+        if (pecaOrigem.classList.contains('rei') && pecaOrigem.classList.contains('timeA')) {
+            roqueTimeADireito = false;
+            roqueTimeAEsquerdo = false;
+        }
+        if (idPosicaoOrigem == 'H1') {
+            roqueTimeADireito = false;
+        }
+        if (idPosicaoOrigem == 'A1') {
+            roqueTimeAEsquerdo = false;
+        }
+
+
+        if (pecaOrigem.classList.contains('rei') && pecaOrigem.classList.contains('timeB')) {
+            roqueTimeBDireito = false;
+        }
+
+        if (idPosicaoOrigem == 'H8') {
+            roqueTimeBDireito = false;
+        }
+    }
+}
+
+
+function roqueA(posicaoOrigem, destino) {
+    const idDestino = destino.id;
+
+    if (roqueValidoADireito && roqueValidoAEsquerdo) {
+        if (idDestino == 'G1') {
+            const posicaoTorre = document.getElementById('H1');
+            const torre = posicaoTorre.querySelector('svg');
+            const rei = posicaoOrigem.querySelector('svg');
+            destino.appendChild(rei);
+            const destinoTorre = document.getElementById('F1');
+            destinoTorre.appendChild(torre);
+
+            passarVez();
+            limparTabuleiro();
+        } else if (idDestino == 'C1') {
+            const posicaoTorre = document.getElementById('A1');
+            const torre = posicaoTorre.querySelector('svg');
+            const rei = posicaoOrigem.querySelector('svg');
+            destino.appendChild(rei);
+            const destinoTorre = document.getElementById('D1');
+            destinoTorre.appendChild(torre);
+
+            passarVez();
+            limparTabuleiro();
+        } 
+    } 
+
+        if (roqueValidoADireito) {
+            if (idDestino == 'G1') {
+                const posicaoTorre = document.getElementById('H1');
+                const torre = posicaoTorre.querySelector('svg');
+                const rei = posicaoOrigem.querySelector('svg');
+                destino.appendChild(rei);
+                const destinoTorre = document.getElementById('F1');
+                destinoTorre.appendChild(torre);
+
+                passarVez();
+                limparTabuleiro();
+            }
+        }
+
+    if (roqueValidoAEsquerdo) {
+        if (idDestino == 'C1') {
+            const posicaoTorre = document.getElementById('A1');
+            const torre = posicaoTorre.querySelector('svg');
+            const rei = posicaoOrigem.querySelector('svg');
+            destino.appendChild(rei);
+            const destinoTorre = document.getElementById('D1');
+            destinoTorre.appendChild(torre);
+
+            passarVez();
+            limparTabuleiro();
+        }
+    }
 }
