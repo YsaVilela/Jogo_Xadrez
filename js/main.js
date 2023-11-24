@@ -4,11 +4,14 @@ const times = ['timeA', 'timeB'];
 
 
 const tabuleiro = document.querySelector('.tabuleiro');
-const posicaotabuleiro = document.querySelectorAll('.posicao');
 
 let jogadorAtual = 'timeA'; // Comece com o jogador 'time A'
 
 let pecaEscolhida = false;
+
+let validacaoXeque = false;
+
+var movimentosPossiveisRei = [];
 
 
 tabuleiro.onclick = function (event) {
@@ -62,17 +65,19 @@ tabuleiro.onclick = function (event) {
 };
 
 function limparTabuleiro() {
+    const posicaotabuleiro = document.querySelectorAll('.posicao');
     for (let j = 0; j < posicaotabuleiro.length; j++) {
         posicaotabuleiro[j].classList.remove('destacar');
         posicaotabuleiro[j].classList.remove('movimento');
         posicaotabuleiro[j].classList.remove('captura');
+        posicaotabuleiro[j].classList.remove('xeque');
     }
 }
 
 function movimentoCavalo(posicao) {
     const [colunaOrigem, linhaOrigem] = posicao.id;
 
-    const movimentosPossivelCavalo = [];
+    const movimentosPossiveisCavalo = [];
 
     const movimentosRelativos = [
         [-2, -1],
@@ -96,17 +101,23 @@ function movimentoCavalo(posicao) {
             const idNovaPosicao = `${novaColuna}${novaLinha}`;
             const novaPosicao = document.getElementById(idNovaPosicao);
 
-            movimentosPossivelCavalo.push(idNovaPosicao);
+            movimentosPossiveisCavalo.push(idNovaPosicao);
 
-            if (novaPosicao) {
-                const pecaCaminho = novaPosicao.querySelector('.peca');
+            if (validacaoXeque) {
+                if (movimentosPossiveisRei.includes(idNovaPosicao)) {
+                    adicionarPosicaoXeque(novaPosicao);
+                }
+            } else {
+                if (novaPosicao) {
+                    const pecaCaminho = novaPosicao.querySelector('.peca');
 
-                if (!pecaCaminho) {
-                    novaPosicao.classList.add('movimento');
+                    if (!pecaCaminho) {
+                        novaPosicao.classList.add('movimento');
 
-                } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
-                    novaPosicao.classList.add('captura');
-                    novaPosicao.classList.add('movimento');
+                    } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+                        novaPosicao.classList.add('captura');
+                        novaPosicao.classList.add('movimento');
+                    }
                 }
             }
         }
@@ -150,14 +161,24 @@ function movimentoTorre(posicao) {
             if (novaPosicao) {
                 const pecaCaminho = novaPosicao.querySelector('.peca');
 
-                if (!pecaCaminho) {
-                    novaPosicao.classList.add('movimento');
-                } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
-                    novaPosicao.classList.add('captura');
-                    novaPosicao.classList.add('movimento');
-                    break;
+                if (validacaoXeque) {
+                    if (pecaCaminho) {
+                        movimentosPossiveisTorre.filter(remover => remover == idNovaPosicao);
+                        break;
+                    }
+                    if (movimentosPossiveisRei.includes(idNovaPosicao)) {
+                        adicionarPosicaoXeque(novaPosicao);
+                    }
                 } else {
-                    break;
+                    if (!pecaCaminho) {
+                        novaPosicao.classList.add('movimento');
+                    } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+                        novaPosicao.classList.add('captura');
+                        novaPosicao.classList.add('movimento');
+                        break;
+                    } else {
+                        break;
+                    }
                 }
             }
         }
@@ -197,17 +218,28 @@ function movimentoBispo(posicao) {
 
             movimentosPossiveisBispo.push(idNovaPosicao);
 
+
             if (novaPosicao) {
                 const pecaCaminho = novaPosicao.querySelector('.peca');
 
-                if (!pecaCaminho) {
-                    novaPosicao.classList.add('movimento');
-                } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
-                    novaPosicao.classList.add('captura');
-                    novaPosicao.classList.add('movimento');
-                    break;
+                if (validacaoXeque) {
+                    if (pecaCaminho) {
+                        movimentosPossiveisBispo.filter(remover => remover == idNovaPosicao);
+                        break;
+                    }
+                    if (movimentosPossiveisRei.includes(idNovaPosicao)) {
+                        adicionarPosicaoXeque(novaPosicao);
+                    }
                 } else {
-                    break;
+                    if (!pecaCaminho) {
+                        novaPosicao.classList.add('movimento');
+                    } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+                        novaPosicao.classList.add('captura');
+                        novaPosicao.classList.add('movimento');
+                        break;
+                    } else {
+                        break;
+                    }
                 }
             }
         }
@@ -220,10 +252,15 @@ function movimentoRainha(posicao) {
     movimentoTorre(posicao);
 }
 
+
 function movimentoRei(posicao) {
     const [colunaOrigem, linhaOrigem] = posicao.id;
 
-    const movimentosPossiveisRei = [];
+    if (validacaoXeque) {
+        var movimentosReiClicado = movimentosPossiveisRei;
+    }
+
+    movimentosPossiveisRei = [];
 
     const movimentosRelativos = [
         [0, 1],   // Movimento para cima
@@ -252,14 +289,25 @@ function movimentoRei(posicao) {
             if (novaPosicao) {
                 const pecaCaminho = novaPosicao.querySelector('.peca');
 
-                if (!pecaCaminho) {
-                    novaPosicao.classList.add('movimento');
-                } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
-                    novaPosicao.classList.add('captura');
-                    novaPosicao.classList.add('movimento');
+                if (validacaoXeque) {
+                    if (movimentosReiClicado.includes(idNovaPosicao)) {
+                        adicionarPosicaoXeque(novaPosicao);
+                    }
+                } else {
+
+                    if (!pecaCaminho) {
+                        novaPosicao.classList.add('movimento');
+                    } else if (!pecaCaminho.classList.contains(jogadorAtual)) {
+                        novaPosicao.classList.add('captura');
+                        novaPosicao.classList.add('movimento');
+                    }
                 }
             }
         }
+    }
+
+    if (!validacaoXeque) {
+        validarXeque();
     }
 }
 
@@ -269,12 +317,16 @@ function movimentoPeao(posicao) {
 
     const movimentosPossiveisPeao = [];
 
-    const direcao = (jogadorAtual === 'timeA') ? 1 : -1; // Define a direção dos peões
+    var peao = posicao.querySelector('.peca');
+    var jogadorPeca;
 
-    const movimentoSimples = [0, direcao];
-    const movimentoDuplo = [0, direcao * 2];
-    const capturaDireita = [1, direcao];
-    const capturaEsquerda = [-1, direcao];
+    if (peao.classList.contains('timeA')) {
+        jogadorPeca = 'timeA';
+    } else {
+        jogadorPeca = 'timeB';
+    }
+
+    const direcao = (peao.classList.contains('timeA')) ? 1 : -1; // Define a direção dos peões
 
     const posicaoFrente = `${colunaOrigem}${linhas[linhas.indexOf(linhaOrigem) + direcao]}`;
     const posicaoFrenteDuplo = `${colunaOrigem}${linhas[linhas.indexOf(linhaOrigem) + direcao * 2]}`;
@@ -282,17 +334,19 @@ function movimentoPeao(posicao) {
     const elementoFrente = document.getElementById(posicaoFrente);
     const elementoFrenteDuplo = document.getElementById(posicaoFrenteDuplo);
 
-    if (elementoFrente && !elementoFrente.querySelector('.peca')) {
-        movimentosPossiveisPeao.push(posicaoFrente);
-        elementoFrente.classList.add('movimento');
-    }
+    if (!validacaoXeque) {
+        if (elementoFrente && !elementoFrente.querySelector('.peca')) {
+            movimentosPossiveisPeao.push(posicaoFrente);
+            elementoFrente.classList.add('movimento');
+        }
 
-    if ((jogadorAtual === 'timeA' && linhaOrigem === '2') ||
-        (jogadorAtual === 'timeB' && linhaOrigem === '7')) {
-        if (elementoFrenteDuplo && !elementoFrenteDuplo.querySelector('.peca') &&
-            !elementoFrente.querySelector('.peca')) {
-            movimentosPossiveisPeao.push(posicaoFrenteDuplo);
-            elementoFrenteDuplo.classList.add('movimento');
+        if ((jogadorAtual === 'timeA' && linhaOrigem === '2') ||
+            (jogadorAtual === 'timeB' && linhaOrigem === '7')) {
+            if (elementoFrenteDuplo && !elementoFrenteDuplo.querySelector('.peca') &&
+                !elementoFrente.querySelector('.peca')) {
+                movimentosPossiveisPeao.push(posicaoFrenteDuplo);
+                elementoFrenteDuplo.classList.add('movimento');
+            }
         }
     }
 
@@ -306,14 +360,19 @@ function movimentoPeao(posicao) {
             const novaLinha = linhas[novaLinhaIndex];
             const idNovaPosicao = `${novaColuna}${novaLinha}`;
             const novaPosicao = document.getElementById(idNovaPosicao);
+            const pecaCaminho = novaPosicao.querySelector('.peca');
 
             if (novaPosicao) {
-                const pecaCaminho = novaPosicao.querySelector('.peca');
-
-                if (pecaCaminho && !pecaCaminho.classList.contains(jogadorAtual)) {
-                    novaPosicao.classList.add('captura');
-                    novaPosicao.classList.add('movimento');
-                    movimentosPossiveisPeao.push(idNovaPosicao);
+                if (validacaoXeque) {
+                    if (movimentosPossiveisRei.includes(idNovaPosicao)) {
+                        adicionarPosicaoXeque(novaPosicao);
+                    }
+                } else {
+                    if (pecaCaminho && !pecaCaminho.classList.contains(jogadorPeca)) {
+                        movimentosPossiveisPeao.push(idNovaPosicao);
+                        novaPosicao.classList.add('captura');
+                        novaPosicao.classList.add('movimento');
+                    }
                 }
             }
         }
@@ -330,10 +389,10 @@ function movimentarPeca(posicaoDestino) {
     const posicaoOrigem = document.querySelector('.posicao.destacar');
     const pecaOrigem = posicaoOrigem.querySelector('.peca');
     const posicaoOcupada = posicaoDestino.classList.contains('.peca');
-    const posicionamentoDaPeca =  posicaoDestino.querySelector('div')
+    const posicionamentoDaPeca = posicaoDestino.querySelector('div')
 
-    if (pecaOrigem.classList.contains('peao') && (jogadorAtual === 'timeA' && linhaDestino === '8') ||
-        (jogadorAtual === 'timeB' && linhaDestino === '1')) {
+    if (pecaOrigem.classList.contains('peao') && posicaoDestino.classList.contains('movimento') && ((jogadorAtual === 'timeA' && linhaDestino === '8') ||
+        (jogadorAtual === 'timeB' && linhaDestino === '1'))) {
         posicaoParaPromocao = posicionamentoDaPeca;
         pecaOrigem.className = '';
         openPopup();
@@ -404,3 +463,69 @@ function closePopup() {
     document.getElementById('popup').style.display = 'none';
 }
 
+
+
+function validarXeque() {
+    validacaoXeque = true;
+    const oponente = (jogadorAtual === 'timeA') ? 'timeB' : 'timeA';
+
+    const cavaloOponente = tabuleiro.querySelectorAll(`.cavalo.${oponente}`);
+    if (cavaloOponente) {
+        const posicaoCavalo = cavaloOponente[0].parentNode;
+        movimentoCavalo(posicaoCavalo);
+
+        if (cavaloOponente[1]) {
+            const posicaoCavalo = cavaloOponente[1].parentNode;
+            movimentoCavalo(posicaoCavalo);
+        }
+    }
+
+    const torreOponente = tabuleiro.querySelectorAll(`.torre.${oponente}`);
+    if (torreOponente) {
+        const posicaoTorre = torreOponente[0].parentNode;
+        movimentoTorre(posicaoTorre);
+
+        if (torreOponente[1]) {
+            const posicaoTorre = torreOponente[1].parentNode;
+            movimentoTorre(posicaoTorre);
+        }
+    }
+
+    const bispoOponente = tabuleiro.querySelectorAll(`.bispo.${oponente}`);
+    if (bispoOponente) {
+        const posicaoBispo = bispoOponente[0].parentNode;
+        movimentoBispo(posicaoBispo);
+
+        if (bispoOponente[1]) {
+            const posicaoBispo = bispoOponente[1].parentNode;
+            movimentoBispo(posicaoBispo);
+        }
+    }
+
+    const rainhaOponente = tabuleiro.querySelector(`.rainha.${oponente}`);
+    if (rainhaOponente) {
+        const posicaoRainha = rainhaOponente.parentNode;
+        movimentoRainha(posicaoRainha);
+    }
+
+    const peaoOponente = tabuleiro.querySelectorAll(`.peao.${oponente}`);
+    for (let i = 0; i < peaoOponente.length; i++) {
+        const posicaoPeao = peaoOponente[i].parentNode;
+        movimentoPeao(posicaoPeao);
+    }
+
+    const reiOponente = tabuleiro.querySelector(`.rei.${oponente}`);
+    if (reiOponente) {
+        const posicaoRei = reiOponente.parentNode;
+        movimentoRei(posicaoRei);
+    }
+
+    validacaoXeque = false;
+}
+
+
+function adicionarPosicaoXeque(posicao) {
+    posicao.classList.remove('movimento');
+    posicao.classList.remove('captura');
+    posicao.classList.add('xeque');
+}
