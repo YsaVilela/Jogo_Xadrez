@@ -141,3 +141,20 @@
     transform: translate(-50%, -50%);
     z-index: 1;
 }
+
+.reiEmXeque {
+    position: relative;
+}
+
+.reiEmXeque::before {
+    content: "";
+    position: absolute;
+    width: 95%;
+    height: 95%;
+    background-color:#0000FF;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2; 
+}
