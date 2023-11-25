@@ -106,17 +106,25 @@ function movimentoCavalo(posicao) {
             const novaLinha = linhas[novaLinhaIndex];
             const idNovaPosicao = `${novaColuna}${novaLinha}`;
             const novaPosicao = document.getElementById(idNovaPosicao);
+            const pecaCaminho = novaPosicao.querySelector('.peca');
 
             movimentosPossiveisCavalo.push(idNovaPosicao);
 
+            //valida se o sei não entrará em xeque
             if (validacaoXeque) {
                 if (movimentosPossiveisRei.includes(idNovaPosicao)) {
                     adicionarPosicaoXeque(novaPosicao);
                 }
+
+                //valida se o rei foi colocado em xeque
+            } else if (declararXeque && !validacaoXeque) {
+                if (pecaCaminho) {
+                    if (pecaCaminho.classList.contains(jogadorAtual) && pecaCaminho.classList.contains('rei')) {
+                        alertaDeXeque();
+                    }
+                }
             } else {
                 if (novaPosicao) {
-                    const pecaCaminho = novaPosicao.querySelector('.peca');
-
                     if (!pecaCaminho) {
                         novaPosicao.classList.add('movimento');
 
@@ -170,9 +178,9 @@ function movimentoTorre(posicao) {
                 //valida se o sei não entrará em xeque
                 if (validacaoXeque && !declararXeque) {
                     if (pecaCaminho) {
-                        if (pecaCaminho.classList.contains('rei') && pecaCaminho.classList.contains(jogadorAtual)){
+                        if (pecaCaminho.classList.contains('rei') && pecaCaminho.classList.contains(jogadorAtual)) {
                             movimentosPossiveisTorre.filter(remover => remover == idNovaPosicao);
-                        }else {
+                        } else {
                             movimentosPossiveisTorre.filter(remover => remover == idNovaPosicao);
                             break;
                         }
@@ -182,21 +190,19 @@ function movimentoTorre(posicao) {
                     }
 
 
-                //valida se o rei foi colocado em xeque
+                    //valida se o rei foi colocado em xeque
                 } else if (declararXeque && !validacaoXeque) {
                     if (pecaCaminho) {
-                        console.log(pecaCaminho);
-                        console.log(jogadorAtual);
-                        if (pecaCaminho.classList.contains(jogadorAtual) && pecaCaminho.classList.contains('rei')){
+                        if (pecaCaminho.classList.contains(jogadorAtual) && pecaCaminho.classList.contains('rei')) {
                             alertaDeXeque();
                             break;
-                        }else{
+                        } else {
                             movimentosPossiveisTorre.filter(remover => remover == idNovaPosicao);
                             break;
                         }
                     }
 
-                //calcula os movimentos e demarca
+                    //calcula os movimentos e demarca
                 } else {
                     if (!pecaCaminho) {
                         novaPosicao.classList.add('movimento');
@@ -250,17 +256,28 @@ function movimentoBispo(posicao) {
             if (novaPosicao) {
                 const pecaCaminho = novaPosicao.querySelector('.peca');
 
-                if (validacaoXeque) {
+                if (validacaoXeque && !declararXeque) {
                     if (pecaCaminho) {
-                        if (pecaCaminho.classList.contains('rei') && pecaCaminho.classList.contains(jogadorAtual)){
+                        if (pecaCaminho.classList.contains('rei') && pecaCaminho.classList.contains(jogadorAtual)) {
                             movimentosPossiveisBispo.filter(remover => remover == idNovaPosicao);
-                        }else {
+                        } else {
                             movimentosPossiveisBispo.filter(remover => remover == idNovaPosicao);
                             break;
                         }
                     }
                     if (movimentosPossiveisRei.includes(idNovaPosicao)) {
                         adicionarPosicaoXeque(novaPosicao);
+                    }
+                    //valida se o rei foi colocado em xeque
+                } else if (declararXeque && !validacaoXeque) {
+                    if (pecaCaminho) {
+                        if (pecaCaminho.classList.contains(jogadorAtual) && pecaCaminho.classList.contains('rei')) {
+                            alertaDeXeque();
+                            break;
+                        } else {
+                            movimentosPossiveisBispo.filter(remover => remover == idNovaPosicao);
+                            break;
+                        }
                     }
                 } else {
                     if (!pecaCaminho) {
@@ -366,7 +383,7 @@ function movimentoPeao(posicao) {
     const elementoFrente = document.getElementById(posicaoFrente);
     const elementoFrenteDuplo = document.getElementById(posicaoFrenteDuplo);
 
-    if (!validacaoXeque) {
+    if (!validacaoXeque && !declararXeque) {
         if (elementoFrente && !elementoFrente.querySelector('.peca')) {
             movimentosPossiveisPeao.push(posicaoFrente);
             elementoFrente.classList.add('movimento');
@@ -395,9 +412,19 @@ function movimentoPeao(posicao) {
             const pecaCaminho = novaPosicao.querySelector('.peca');
 
             if (novaPosicao) {
-                if (validacaoXeque) {
+                //valida se o sei não entrará em xeque
+                if (validacaoXeque && !declararXeque) {
                     if (movimentosPossiveisRei.includes(idNovaPosicao)) {
                         adicionarPosicaoXeque(novaPosicao);
+                    }
+                }
+
+                //valida se o rei foi colocado em xeque
+                else if (declararXeque && !validacaoXeque) {
+                    if (pecaCaminho) {
+                        if (pecaCaminho.classList.contains(jogadorAtual) && pecaCaminho.classList.contains('rei')) {
+                            alertaDeXeque();
+                        }
                     }
                 } else {
                     if (pecaCaminho && !pecaCaminho.classList.contains(jogadorPeca)) {
@@ -426,18 +453,19 @@ function movimentarPeca() {
     //realizar promoção do peão
     if (pecaOrigem.classList.contains('peao') && posicaoDeDestino.classList.contains('movimento') && ((jogadorAtual === 'timeA' && linhaDestino === '8') ||
         (jogadorAtual === 'timeB' && linhaDestino === '1'))) {
+        posicionamentoDaPeca.className = '';
         posicaoParaPromocao = posicionamentoDaPeca;
         pecaOrigem.className = '';
         openPopup();
-    
-    //realizar movimento comum
+
+        //realizar movimento comum
     } else if (!posicaoOcupada && posicaoDeDestino.classList.contains('movimento')) {
         var pecaDeDestino = posicaoDeDestino.querySelector('div')
         pecaDeDestino.setAttribute('class', pecaOrigem.getAttribute('class'));
         pecaOrigem.removeAttribute('class');
         passarVez();
-    
-    //realizar captura
+
+        //realizar captura
     } else if (posicaoOcupada && posicaoDeDestino.classList.contains('captura')) {
         posicaoDeDestino = posicaoDeDestino.querySelector('div')
         posicaoDeDestino.setAttribute('class', pecaOrigem.getAttribute('class'));
@@ -576,25 +604,21 @@ function possivelDeclaracaoXeque() {
     var pecaDeDestino = posicaoDeDestino.querySelector('div')
 
     switch (true) {
-        // case pecaDeDestino.classList.contains('cavalo'):
-        //     movimentoCavalo(posicaoDeDestino);
-        //     break;
+        case pecaDeDestino.classList.contains('cavalo'):
+            movimentoCavalo(posicaoDeDestino);
+            break;
         case pecaDeDestino.classList.contains('torre'):
-            console.log('Torre identificada');
             movimentoTorre(posicaoDeDestino);
             break;
-        // case pecaDeDestino.classList.contains('bispo'):
-        //     movimentoBispo(posicaoDeDestino);
-        //     break;
-        // case pecaDeDestino.classList.contains('rei'):
-        //     movimentoRei(posicaoDeDestino);
-        //     break;
-        // case pecaDeDestino.classList.contains('rainha'):
-        //     movimentoRainha(posicaoDeDestino);
-        //     break;
-        // case pecaDeDestino.classList.contains('peao'):
-        //     movimentoPeao(posicaoDeDestino);
-        //     break;
+        case pecaDeDestino.classList.contains('bispo'):
+            movimentoBispo(posicaoDeDestino);
+            break;
+        case pecaDeDestino.classList.contains('rainha'):
+            movimentoRainha(posicaoDeDestino);
+            break;
+        case pecaDeDestino.classList.contains('peao'):
+            movimentoPeao(posicaoDeDestino);
+            break;
         default:
             console.log('Peça não identificada');
     }
