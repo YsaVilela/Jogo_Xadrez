@@ -77,6 +77,7 @@ function limparTabuleiro() {
         posicaotabuleiro[j].classList.remove('movimento');
         posicaotabuleiro[j].classList.remove('captura');
         posicaotabuleiro[j].classList.remove('xeque');
+        posicaotabuleiro[j].classList.remove('reiEmXeque');
     }
 }
 
@@ -120,9 +121,11 @@ function movimentoCavalo(posicao) {
             } else if (declararXeque && !validacaoXeque) {
                 if (pecaCaminho) {
                     if (pecaCaminho.classList.contains(jogadorAtual) && pecaCaminho.classList.contains('rei')) {
-                        alertaDeXeque();
+                            alertaDeXeque();
                     }
                 }
+
+                //calcula os movimentos padrões e demarca
             } else {
                 if (novaPosicao) {
                     if (!pecaCaminho) {
@@ -202,7 +205,7 @@ function movimentoTorre(posicao) {
                         }
                     }
 
-                    //calcula os movimentos e demarca
+                    //calcula os movimentos padrões e demarca
                 } else {
                     if (!pecaCaminho) {
                         novaPosicao.classList.add('movimento');
@@ -448,7 +451,7 @@ function movimentarPeca() {
     const posicaoOrigem = document.querySelector('.posicao.destacar');
     const pecaOrigem = posicaoOrigem.querySelector('.peca');
     const posicaoOcupada = posicaoDeDestino.classList.contains('.peca');
-    const posicionamentoDaPeca = posicaoDeDestino.querySelector('div')
+    const posicionamentoDaPeca = posicaoDeDestino.querySelector('div');
 
     //realizar promoção do peão
     if (pecaOrigem.classList.contains('peao') && posicaoDeDestino.classList.contains('movimento') && ((jogadorAtual === 'timeA' && linhaDestino === '8') ||
@@ -474,7 +477,6 @@ function movimentarPeca() {
     }
 
     limparTabuleiro();
-
     possivelDeclaracaoXeque();
 }
 
@@ -632,3 +634,5 @@ function alertaDeXeque() {
 
     posicao.classList.add('reiEmXeque');
 }
+
+
